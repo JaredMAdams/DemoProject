@@ -1,0 +1,72 @@
+<div class="main">
+
+    <h1 class="header">Employee List</h1>
+
+    <div class="table">
+
+        <button mat-flat-button color="primary" style="float: right;" (click)="createEmployee();">
+            <mat-icon>add</mat-icon> New Employee
+        </button>
+
+        <table mat-table [dataSource]="dataSource">
+
+            <ng-container matColumnDef="number">
+                <th mat-header-cell *matHeaderCellDef="">No.</th>
+                <td mat-cell *matCellDef="let employee; let i = index">{{i + 1}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="first_name">
+                <th mat-header-cell *matHeaderCellDef="">First Name</th>
+                <td mat-cell *matCellDef="let employee">{{employee.firstName}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="last_name">
+                <th mat-header-cell *matHeaderCellDef="">Last Name</th>
+                <td mat-cell *matCellDef="let employee">{{employee.lastName}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="addresses">
+                <th mat-header-cell *matHeaderCellDef="">Addresses</th>
+                <td mat-cell *matCellDef="let employee">
+                    <button mat-icon-button color="primary" aria-label="icon button with an open in new tab icon" (click)="viewAddresses(employee)">
+                    <mat-icon>open_in_new</mat-icon>
+                  </button>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef=""></th>
+                <td mat-cell *matCellDef="let employee, let i = index">
+
+                    <button mat-icon-button color="primary" aria-label="icon button with an open in new tab icon" (click)="editEmployee(employee)">
+                            <mat-icon>edit</mat-icon>
+                    </button>
+
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef=""></th>
+                <td mat-cell *matCellDef="let employee, let i = index">
+
+                    <button mat-icon-button color="primary" aria-label="icon button with an open in new tab icon" (click)="deleteEmployee(employee.employeeId, i)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+
+        <mat-paginator #paginator id="paginator" [length]="100"
+            [pageSize]="5"
+            [pageSizeOptions]="[5, 10, 20]"
+            aria-label="Select page">
+        </mat-paginator>
+
+    </div>
+
+</div>

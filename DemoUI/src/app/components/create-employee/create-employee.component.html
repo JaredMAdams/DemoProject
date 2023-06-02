@@ -1,0 +1,166 @@
+<div class="main">
+
+    <button id="close" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="onClose()">
+        <mat-icon>close</mat-icon>
+    </button>
+
+    <h1>Add Employee Details</h1>
+
+    <div class="personal_information">
+
+        <mat-form-field id="first_name" appearance="fill">
+
+            <mat-label>First Name</mat-label>
+            <input matInput [(ngModel)]="employee.firstName" autocomplete="off">
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="employee.firstName !=''" (click)="clearFirstName();">
+                <mat-icon>close</mat-icon>
+            </button>
+
+        </mat-form-field>
+
+        <br><br>
+
+        <mat-form-field id="last_name" appearance="fill">
+
+            <mat-label>Last Name</mat-label>
+            <input matInput [(ngModel)]="employee.lastName" autocomplete="off">
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="employee.lastName !=''" (click)="clearLastName();">
+                <mat-icon>close</mat-icon>
+            </button>
+
+        </mat-form-field>
+
+        <br><br>
+        
+    </div>
+
+    <div>
+
+        <mat-form-field *ngFor="let address of employee.addresses; let i = index" id="street_address" appearance="fill">
+
+            <mat-label>Street Address</mat-label>
+            <input matInput  [(ngModel)]="address.streetAddress" autocomplete="off">
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="address.streetAddress!= undefined" >
+                <mat-icon>close</mat-icon>
+            </button>
+
+        </mat-form-field>
+
+        <br><br>
+
+        <mat-form-field *ngFor="let address of employee.addresses; let i = index" id="apt_number" appearance="fill">
+
+            <mat-label>Apt. Number</mat-label>
+            <input matInput [(ngModel)]="address.aptNumber" autocomplete="off">
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="address.aptNumber != undefined">
+                <mat-icon>close</mat-icon>
+            </button>
+
+        </mat-form-field>
+
+        <br><br>
+
+        <mat-form-field *ngFor="let address of employee.addresses; let i = index" id="city" appearance="fill">
+
+            <mat-label>City</mat-label>
+            <input matInput [(ngModel)]="address.city" autocomplete="off">
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="address.city != undefined">
+                <mat-icon>close</mat-icon>
+            </button>
+
+        </mat-form-field>
+
+        <br><br>
+
+        <mat-form-field *ngFor="let address of employee.addresses; let i = index" id="state" appearance="fill">
+
+            <mat-label>State</mat-label>
+            <mat-select [(value)]="address.state">
+                <mat-option value="Alabama">Alabama</mat-option>
+                <mat-option value="Alaska">Alaska</mat-option>
+                <mat-option value="Alberta">Alberta</mat-option>
+                <mat-option value="American Samoa">American Samoa</mat-option>
+                <mat-option value="Arizona">Arizona</mat-option>
+                <mat-option value="Armed Forces (AE)">Armed Forces (AE)</mat-option>
+                <mat-option value="Armed Forces Americas">Armed Forces Americas</mat-option>
+                <mat-option value="Armed Forces Pacific">Armed Forces Pacific</mat-option>
+                <mat-option value="British Columbia">British Columbia</mat-option>
+                <mat-option value="California">California</mat-option>
+                <mat-option value="Colorado">Colorado</mat-option>
+                <mat-option value="Connecticut">Connecticut</mat-option>
+                <mat-option value="Georgia">Georgia</mat-option>
+                <mat-option value="Guam">Guam</mat-option>
+                <mat-option value="Hawaii">Hawaii</mat-option>
+                <mat-option value="Idaho">Idaho</mat-option>
+                <mat-option value="Illinois">Illinois</mat-option>
+                <mat-option value="Indiana">Indiana</mat-option>
+                <mat-option value="Iowa">Iowa</mat-option>
+                <mat-option value="Kansas">Kansas</mat-option>
+                <mat-option value="Kentucky">Kentucky</mat-option>
+                <mat-option value="Louisiana">Louisiana</mat-option>
+                <mat-option value="Maine">Maine</mat-option>
+                <mat-option value="Manitoba">Manitoba</mat-option>
+                <mat-option value="Maryland">Maryland</mat-option>
+                <mat-option value="Massachusetts">Massachusetts</mat-option>
+                <mat-option value="Michigan">Michigan</mat-option>
+                <mat-option value="Minnesota">Minnesota</mat-option>
+                <mat-option value="Mississippi">Mississippi</mat-option>
+                <mat-option value="Missouri">Missouri</mat-option>
+                <mat-option value="Montana">Montana</mat-option>
+                <mat-option value="Nebraska">Nebraska</mat-option>
+                <mat-option value="Nevada">Nevada</mat-option>
+                <mat-option value="New Brunswick">New Brunswick</mat-option>
+                <mat-option value="New Hampshire">New Hampshire</mat-option>
+                <mat-option value="New Jersey">New Jersey</mat-option>
+                <mat-option value="New Mexico">New Mexico</mat-option>
+                <mat-option value="New York">New York</mat-option>
+                <mat-option value="Newfoundland">Newfoundland</mat-option>
+                <mat-option value="North Carolina">North Carolina</mat-option>
+                <mat-option value="North Dakota">North Dakota</mat-option>
+                <mat-option value="Northwest Territories">Northwest Territories</mat-option>
+                <mat-option value="Nova Scotia">Nova Scotia</mat-option>
+                <mat-option value="Nunavut">Nunavut</mat-option>
+                <mat-option value="Ohio">Ohio</mat-option>
+                <mat-option value="Oklahoma">Oklahoma</mat-option>
+                <mat-option value="Ontario">Ontario</mat-option>
+                <mat-option value="Oregon">Oregon</mat-option>
+                <mat-option value="Pennsylvania">Pennsylvania</mat-option>
+                <mat-option value="Prince Edward Island">Prince Edward Island</mat-option>
+                <mat-option value="Puerto Rico">Puerto Rico</mat-option>
+                <mat-option value="Quebec">Quebec</mat-option>
+                <mat-option value="Rhode Island">Rhode Island</mat-option>
+                <mat-option value="Saskatchewan">Saskatchewan</mat-option>
+                <mat-option value="South Carolina">South Carolina</mat-option>
+                <mat-option value="South Dakota">South Dakota</mat-option>
+                <mat-option value="Tennessee">Tennessee</mat-option>
+                <mat-option value="Texas">Texas</mat-option>
+                <mat-option value="Utah">Utah</mat-option>
+                <mat-option value="Vermont">Vermont</mat-option>
+                <mat-option value="Virgin Islands">Virgin Islands</mat-option>
+                <mat-option value="Virginia">Virginia</mat-option>
+                <mat-option value="Washington">Washington</mat-option>
+                <mat-option value="West Virginia">West Virginia</mat-option>
+                <mat-option value="Wisconsin">Wisconsin</mat-option>
+                <mat-option value="Wyoming">Wyoming</mat-option>
+                <mat-option value="Yukon Territory">Yukon Territory</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <br><br>
+
+        <mat-form-field *ngFor="let address of employee.addresses; let i = index" id="zip_code" appearance="fill">
+
+            <mat-label>Zip Code</mat-label>
+            <input matInput [(ngModel)]="address.zipCode" autocomplete="off">
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="address.zipCode != undefined">
+                <mat-icon>close</mat-icon>
+            </button>
+
+        </mat-form-field>
+
+    </div>
+
+    <button mat-flat-button color="primary" style="float: right;" (click)="createEmployee();">
+        Save Employee
+    </button>
+</div>
