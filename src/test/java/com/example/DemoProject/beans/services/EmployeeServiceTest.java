@@ -49,8 +49,8 @@ class EmployeeServiceTest {
         employeeRepo = Mockito.mock(EmployeeRepo.class);
         employeeService = new EmployeeService(employeeRepo);
         addresses = Arrays.asList(
-                new Address("22", "33", "Austin", "Texas", 55555),
-                new Address("11", "44", "Queens", "New York", 55555)
+                new Address("22", "33", "Austin", "Texas", "55555"),
+                new Address("11", "44", "Queens", "New York", "55555")
         );
         employee = new Employee("1", "John", "Doe", addresses);
     }

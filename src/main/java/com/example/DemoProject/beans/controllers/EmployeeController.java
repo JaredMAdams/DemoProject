@@ -12,7 +12,8 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequestMapping("/employee")
+@RequestMapping("/employees")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class EmployeeController {
 
     private EmployeeService employeeService;
@@ -57,6 +58,11 @@ public class EmployeeController {
         return ResponseEntity.ok(this.employeeService.getEmployeesByLastName(lastName));
     }
 
+    @GetMapping
+    public ResponseEntity<List<Employee>> getAllUsers() {
+        return ResponseEntity.ok(this.employeeService.getAllEmployees());
+    }
+
     @PostMapping
     public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.employeeService.createEmployee(employee));
@@ -66,7 +72,7 @@ public class EmployeeController {
     public ResponseEntity<List<Employee>> createMultipleEmployees(@RequestBody List<Employee> employees) {
         CompletableFuture<List<Employee>> employees1 = employeeService.createMultipleEmployees(employees);
         CompletableFuture<List<Employee>> employees2 = employeeService.createMultipleEmployees(employees);
-        CompletableFuture.allOf(employees1,employees2).join();
+        CompletableFuture.allOf(employees1, employees2).join();
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

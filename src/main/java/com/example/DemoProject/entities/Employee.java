@@ -25,6 +25,8 @@ public class Employee {
     @Field
     private List<Address> addresses;
 
+    public Employee(){}
+
     public Employee(String employeeId, String firstName, String lastName) {
         this.employeeId = employeeId;
         this.firstName = firstName;

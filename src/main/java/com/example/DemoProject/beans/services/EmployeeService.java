@@ -24,21 +24,30 @@ public class EmployeeService {
     public EmployeeService(EmployeeRepo employeeRepo) {
         this.employeeRepo = employeeRepo;
         states.put("Alabama","AL");
+        states.put("AL","AL");
         states.put("Alaska","AK");
+        states.put("AK","AK");
         states.put("Alberta","AB");
+        states.put("AB","AB");
         states.put("American Samoa","AS");
+        states.put("AS","AS");
         states.put("Arizona","AZ");
+        states.put("AZ","AZ");
         states.put("Arkansas","AR");
+        states.put("AR","AR");
         states.put("Armed Forces (AE)","AE");
+        states.put("AE","AE");
         states.put("Armed Forces Americas","AA");
+        states.put("AA","AA");
         states.put("Armed Forces Pacific","AP");
+        states.put("AP","AP");
         states.put("British Columbia","BC");
+        states.put("BC","BC");
         states.put("California","CA");
+        states.put("CA","CA");
         states.put("Colorado","CO");
+        states.put("CO","CO");
         states.put("Connecticut","CT");
-        states.put("Delaware","DE");
-        states.put("District Of Columbia","DC");
-        states.put("Florida","FL");
         states.put("Georgia","GA");
         states.put("Guam","GU");
         states.put("Hawaii","HI");
@@ -94,6 +103,67 @@ public class EmployeeService {
         states.put("Wisconsin","WI");
         states.put("Wyoming","WY");
         states.put("Yukon Territory","YT");
+        states.put("CT","CT");
+        states.put("DE","DE");
+        states.put("DC","DC");
+        states.put("FL","FL");
+        states.put("GA","GA");
+        states.put("GU","GU");
+        states.put("HI","HI");
+        states.put("ID","ID");
+        states.put("IL","IL");
+        states.put("IN","IN");
+        states.put("IA","IA");
+        states.put("KD","KS");
+        states.put("KY","KY");
+        states.put("LA","LA");
+        states.put("ME","ME");
+        states.put("MB","MB");
+        states.put("MD","MD");
+        states.put("MA","MA");
+        states.put("MI","MI");
+        states.put("MN","MN");
+        states.put("MS","MS");
+        states.put("MO","MO");
+        states.put("MT","MT");
+        states.put("NE","NE");
+        states.put("NV","NV");
+        states.put("NB","NB");
+        states.put("NH","NH");
+        states.put("NJ","NJ");
+        states.put("NM","NM");
+        states.put("NY","NY");
+        states.put("NF","NF");
+        states.put("NC","NC");
+        states.put("ND","ND");
+        states.put("NT","NT");
+        states.put("NS","NS");
+        states.put("NU","NU");
+        states.put("OH","OH");
+        states.put("OK","OK");
+        states.put("ON","ON");
+        states.put("OR","OR");
+        states.put("PA","PA");
+        states.put("PE","PE");
+        states.put("PR","PR");
+        states.put("QC","QC");
+        states.put("RI","RI");
+        states.put("SK","SK");
+        states.put("SC","SC");
+        states.put("SD","SD");
+        states.put("TN","TN");
+        states.put("TX","TX");
+        states.put("UT","UT");
+        states.put("VT","VT");
+        states.put("VI","VI");
+        states.put("VA","VA");
+        states.put("WA","WA");
+        states.put("WV","WV");
+        states.put("WI","WI");
+        states.put("WY","WY");
+        states.put("YT","YT");
+        states.put("", null);
+        states.put(null, null);
     }
 
     //Extracting details of dummy employee and adding them to a list to be returned.
@@ -133,18 +203,28 @@ public class EmployeeService {
         return this.employeeRepo.findByLastName(lastName);
     }
 
+    public List<Employee> getAllEmployees() {
+        return this.employeeRepo.findAll();
+    }
+
 //    @CachePut(cacheNames = "employeeFirstName", cacheManager = "alternateCacheManager")
     public Employee createEmployee(Employee employee) throws InvalidStateException {
         //Check if user input their state as its full name.
         //If they did, it converts the state into its 2-digit code.
         //If the state does not exist, an InvalidStateException is thrown, telling the user to please enter a valid state.
+
         employee.getAddresses().forEach((address) -> states.entrySet()
                 .stream()
                 .filter(e -> address.getState().equalsIgnoreCase(e.getKey()))
                 .findFirst()
                 .ifPresentOrElse(
                         (key) -> address.setState(key.getValue()),
-                        () -> {throw new InvalidStateException("Please Enter a Valid State");}));
+                        () -> {
+                            throw new InvalidStateException("Please Enter a Valid State");
+                        }
+                )
+        );
+
         return this.employeeRepo.save(employee);
     }
 
