@@ -92,7 +92,7 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.height = "85%";
+    dialogConfig.height = "56%";
     dialogConfig.width = "80%";
     let dialogRef = this.dialog.open(CreateEmployeeComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((newEmployee) => {

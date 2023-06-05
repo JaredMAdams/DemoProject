@@ -78,4 +78,20 @@ export class AddressListComponent implements OnInit {
     this.employeeService.PostEmployee(this.employee).subscribe();
     this.dialogRef.close();
   }
+
+  clearStreetAddress() {
+    this.newAddress.streetAddress = '';
+  }
+
+  clearAptNumber() {
+    this.newAddress.aptNumber = '';
+  }
+
+  clearCity() {
+    this.newAddress.city = '';
+  }
+
+  clearZipCode() {
+    this.newAddress.zipCode = '';
+  }
 }

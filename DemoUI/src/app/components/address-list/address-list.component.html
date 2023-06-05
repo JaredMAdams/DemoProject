@@ -66,21 +66,21 @@
 
         <br><br>
 
-        <mat-form-field id="street_address" appearance="fill" style="width: 50%;">
+        <mat-form-field id="street_address" appearance="fill" style="width: 70%;">
 
             <mat-label>Street Address</mat-label>
             <input matInput  [(ngModel)]="newAddress.streetAddress" autocomplete="off">
-            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="newAddress.streetAddress!= undefined" >
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="newAddress.streetAddress!= ''" (click)="clearStreetAddress()">
                 <mat-icon>close</mat-icon>
             </button>
 
         </mat-form-field>
 
-        <mat-form-field id="apt_number" appearance="fill" style="width:20%; margin-left: 2%;">
+        <mat-form-field id="apt_number" appearance="fill" style="width:28%; margin-left: 2%;">
 
             <mat-label>Apt. Number</mat-label>
             <input matInput [(ngModel)]="newAddress.aptNumber" autocomplete="off">
-            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="newAddress.aptNumber != undefined">
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="newAddress.aptNumber != ''"  (click)="clearAptNumber()">
                 <mat-icon>close</mat-icon>
             </button>
 
@@ -88,17 +88,17 @@
 
         <br><br>
 
-        <mat-form-field id="city" appearance="fill" style="width: 28%">
+        <mat-form-field id="city" appearance="fill" style="width: 30%">
 
             <mat-label>City</mat-label>
             <input matInput [(ngModel)]="newAddress.city" autocomplete="off">
-            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="newAddress.city != undefined">
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="newAddress.city != ''" (click)="clearCity()">
                 <mat-icon>close</mat-icon>
             </button>
 
         </mat-form-field>
 
-        <mat-form-field id="state" appearance="fill" style="width: 20%; margin-left: 2%;">
+        <mat-form-field id="state" appearance="fill" style="width: 50%; margin-left: 2%;">
 
             <mat-label>State</mat-label>
             <mat-select [(value)]="newAddress.state">
@@ -172,11 +172,11 @@
             </mat-select>
         </mat-form-field>
 
-        <mat-form-field id="zip_code" appearance="fill" style="width: 20%; margin-left: 2%;">
+        <mat-form-field id="zip_code" appearance="fill" style="width: 16%; margin-left: 2%;">
 
             <mat-label>Zip Code</mat-label>
             <input matInput [(ngModel)]="newAddress.zipCode" autocomplete="off">
-            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="newAddress.zipCode != undefined">
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="newAddress.zipCode != ''" (click)="clearZipCode()">
                 <mat-icon>close</mat-icon>
             </button>
 
