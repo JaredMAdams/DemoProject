@@ -1,6 +1,7 @@
 <div class="personal_information">
 
-    <mat-form-field id="first_name" appearance="fill" style="width: 40%;">
+    <!---->
+    <mat-form-field id="first_name" appearance="fill" style="width: 100%;">
 
         <mat-label>First Name</mat-label>
         <input matInput [(ngModel)]="employee.firstName" autocomplete="off">
@@ -10,7 +11,9 @@
 
     </mat-form-field>
 
-    <mat-form-field id="last_name" appearance="fill" style="width: 40%; margin-left: 2%;">
+    <br><br>
+
+    <mat-form-field id="last_name" appearance="fill" style="width: 100%;">
 
         <mat-label>Last Name</mat-label>
         <input matInput [(ngModel)]="employee.lastName" autocomplete="off">
@@ -20,7 +23,7 @@
 
     </mat-form-field>
 
-    <button mat-flat-button color="primary" style="margin-left: 2%;" (click)="saveChanges()">
+    <button mat-flat-button color="primary" style="float: right;" (click)="saveChanges()">
         <mat-icon>save</mat-icon>Save Changes
     </button>
     

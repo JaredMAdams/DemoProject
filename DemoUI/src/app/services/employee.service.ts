@@ -43,7 +43,7 @@ export class EmployeeService {
       );
   }
 
-  GetEmployeesByZipCode(zipCode: number): Observable<Employee[]> {
+  GetEmployeesByZipCode(zipCode: string): Observable<Employee[]> {
     return this.http.get<Employee[]>(`${this.baseUrl}/zip-code/` + zipCode, {headers: environment.headers, withCredentials: environment.withCredentials})
       .pipe(
         retry(1),

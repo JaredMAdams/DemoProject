@@ -13,6 +13,7 @@ import { CreateEmployeeComponent } from './components/create-employee/create-emp
 import { MatFormFieldControl, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
+import { EditAddressComponent } from './components/edit-address/edit-address.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { EditEmployeeComponent } from './components/edit-employee/edit-employee.
     AddressListComponent,
     CreateEmployeeComponent,
     EditEmployeeComponent,
+    EditAddressComponent,
   ],
   imports: [
     BrowserModule,

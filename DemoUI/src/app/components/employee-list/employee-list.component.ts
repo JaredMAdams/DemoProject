@@ -33,6 +33,7 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
       zipCode: '',
     }]
   };
+
   employee: Employee = {
     employeeId: '',
     firstName: '',
@@ -47,6 +48,9 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
   }
 
   dataSource!: MatTableDataSource<Employee>;
+  searchBy: string = 'Everyone';
+  searchParam: string = '';
+  searchParamState: string = 'Alabama';
 
   constructor(public dialogRef: MatDialogRef<EmployeeListComponent>, 
               private dialog: MatDialog, 
@@ -60,18 +64,7 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     this.GetEmployees();
   }
 
-  //gets full list of employees
-  //paginates list
-  GetEmployees()
-  {
-    this.employeeService.GetAllEmployees().subscribe((list: Employee[]) =>
-    {
-      this.employees = list;
-      this.dataSource = new MatTableDataSource(this.employees);
-      this.cdr.detectChanges();
-      this.dataSource.paginator = this.paginator;
-    })    
-  }
+  
 
   //opens mat dialog
   //sends employee data based on index clicked from mat table
@@ -88,6 +81,7 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     let dialogRef =this.dialog.open(AddressListComponent, dialogConfig);
   }
 
+  //Creates new employee to add to system
   createEmployee() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -104,12 +98,13 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     })
   }
 
+  //Edit existing name of employee in list
   editEmployee(employee: Employee) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.height = "15%";
-    dialogConfig.width = "80%";
+    dialogConfig.height = "30";
+    dialogConfig.width = "50%";
     dialogConfig.data = {
       employee: employee
     }
@@ -125,6 +120,93 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     this.employeeService.deleteEmployee(employeeId).subscribe(() => {
       this.employees.splice(i, 1);
       this.dataSource = new MatTableDataSource(this.employees);
+      this.dataSource.paginator = this.paginator;
+    })
+  }
+
+  //Searches DB based on searchBy variable
+  searchEmployees() {
+    switch(this.searchBy) {
+      case 'First Name': {
+        this.GetEmployeesByFirstName();
+        break;
+      }
+      case 'Last Name': {
+        this.GetEmployeesByLastName();
+        break;
+      }
+      case 'Everyone': {
+        this.GetEmployees();
+        break;
+      }
+      case 'State': {
+        this.GetEmployeesByState();
+        break;
+      }
+      case 'City': {
+        this.GetEmployeesByCity();
+        break;
+      }
+      case 'Zip Code': {
+        this.GetEmployeesByZipCode();
+        break;
+      }
+    }
+  }
+
+  //gets full list of employees
+  //paginates list
+  GetEmployees() {
+    this.employeeService.GetAllEmployees().subscribe((list: Employee[]) =>
+    {
+      this.employees = list;
+      this.dataSource = new MatTableDataSource(this.employees);
+      this.cdr.detectChanges();
+      this.dataSource.paginator = this.paginator;
+    })    
+  }
+
+  GetEmployeesByFirstName() {
+    this.employeeService.GetEmployeesByFirstName(this.searchParam).subscribe((newList: Employee[]) => {
+      this.employees = newList;
+      this.dataSource = new MatTableDataSource(this.employees);
+      this.cdr.detectChanges();
+      this.dataSource.paginator = this.paginator;
+    })
+  }
+
+  GetEmployeesByLastName() {
+    this.employeeService.GetEmployeesByLastName(this.searchParam).subscribe((newList: Employee[]) => {
+      this.employees = newList;
+      this.dataSource = new MatTableDataSource(this.employees);
+      this.cdr.detectChanges();
+      this.dataSource.paginator = this.paginator;
+    })
+  }
+
+  GetEmployeesByState() {
+    this.employeeService.GetEmployeesByState(this.searchParamState).subscribe((newList: Employee[]) => {
+      this.employees = newList;
+      this.dataSource = new MatTableDataSource(this.employees);
+      this.cdr.detectChanges();
+      this.dataSource.paginator = this.paginator;
+    })
+  }
+
+  GetEmployeesByCity() {
+    this.employeeService.GetEmployeesByCity(this.searchParam).subscribe((newList: Employee[]) => {
+      this.employees = newList;
+      this.dataSource = new MatTableDataSource(this.employees);
+      this.cdr.detectChanges();
+      this.dataSource.paginator = this.paginator;
+    })
+  }
+
+  GetEmployeesByZipCode() {
+    this.employeeService.GetEmployeesByZipCode(this.searchParam).subscribe((newList: Employee[]) => {
+      this.employees = newList;
+      this.dataSource = new MatTableDataSource(this.employees);
+      this.cdr.detectChanges();
       this.dataSource.paginator = this.paginator;
     })
   }
