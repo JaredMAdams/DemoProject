@@ -25,6 +25,18 @@ export class CreateEmployeeComponent implements OnInit {
     }]
   }
 
+  employees: Employee[] = [{
+    firstName: '',
+    lastName: '',
+    addresses: [{
+      streetAddress: undefined,
+      aptNumber: undefined,
+      city: undefined,
+      state: 'Alabama',
+      zipCode: undefined,
+    }]
+  }]
+
   address: Address = {
     streetAddress: '',
     aptNumber: '',
@@ -47,6 +59,7 @@ export class CreateEmployeeComponent implements OnInit {
               private employeeService: EmployeeService) { }
 
   ngOnInit(): void {
+
   }
 
   onClose() {
@@ -84,9 +97,44 @@ export class CreateEmployeeComponent implements OnInit {
 
   createEmployee(e: any) {
     e.preventDefault();
+    if(this.employees.length == 1){
+      if(this.newEmployeeForm.valid) {
+          
+          this.employee.addresses?.splice(0,1);
+          this.employee.firstName = this.newEmployeeForm.value.firstName!;
+          this.employee.lastName = this.newEmployeeForm.value.lastName!;
+          this.address.streetAddress = this.newEmployeeForm.value.streetAddress!;
+          this.address.aptNumber = this.newEmployeeForm.value.aptNumber!;
+          this.address.city = this.newEmployeeForm.value.city!;
+          this.address.state = this.newEmployeeForm.value.state!;
+          this.address.zipCode = this.newEmployeeForm.value.zipCode!;
 
+          this.employee.addresses?.push(this.address);
+          
+          this.employeeService.PostEmployee(this.employee).subscribe(newEmployee => {
+          this.dialogRef.close(this.employee);
+          })
+        } else {
+          this.newEmployeeForm.markAllAsTouched();
+        }
+    }
+    else {
+      this.employeeService.PostMultipleEmployees(this.employees).subscribe((response) => {
+        console.log(this.employees);
+      })
+    }
+  }
+
+  //Checks if employees is currently empty, if so, splices out the first (empty) entry
+  //Then splices out previously entered address for new employee input
+  //Saves employee info, pushes address into array, then pushes employee into the 'employees' array
+  addAnotherEmployee() {
+    if(this.employees.at(0)?.firstName == '') {
+      this.employees.splice(0,1);
+    }
     if(this.newEmployeeForm.valid) {
       this.employee.addresses?.splice(0,1);
+
       this.employee.firstName = this.newEmployeeForm.value.firstName!;
       this.employee.lastName = this.newEmployeeForm.value.lastName!;
       this.address.streetAddress = this.newEmployeeForm.value.streetAddress!;
@@ -96,12 +144,12 @@ export class CreateEmployeeComponent implements OnInit {
       this.address.zipCode = this.newEmployeeForm.value.zipCode!;
 
       this.employee.addresses?.push(this.address);
-      
-      this.employeeService.PostEmployee(this.employee).subscribe(newEmployee => {
-      this.dialogRef.close(this.employee);
-      })
+    
+      this.employees.push(this.employee);
     } else {
       this.newEmployeeForm.markAllAsTouched();
     }
+    console.log(this.employees.length);
+    console.log(this.employees);
   }
 }

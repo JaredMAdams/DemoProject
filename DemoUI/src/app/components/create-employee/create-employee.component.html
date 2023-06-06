@@ -36,7 +36,7 @@
 
         <div class="personal_information">
 
-            <mat-form-field *ngFor="let address of employee.addresses; let i = index" id="street_address" appearance="fill" style="width: 100%;">
+            <mat-form-field id="street_address" appearance="fill" style="width: 100%;">
 
                 <mat-label>Street Address</mat-label>
 
@@ -48,7 +48,7 @@
     
             <br><br>
     
-            <mat-form-field *ngFor="let address of employee.addresses; let i = index" id="apt_number" appearance="fill" style="width: 30%">
+            <mat-form-field id="apt_number" appearance="fill" style="width: 30%">
     
                 <mat-label>Apt. Number</mat-label>
 
@@ -56,7 +56,7 @@
     
             </mat-form-field>
     
-            <mat-form-field *ngFor="let address of employee.addresses; let i = index" id="city" appearance="fill" style="margin-left: 2%; width: 68%;">
+            <mat-form-field id="city" appearance="fill" style="margin-left: 2%; width: 68%;">
     
                 <mat-label>City</mat-label>
                 <input matInput placeholder="Los Angeles" formControlName="city" autocomplete="off">
@@ -67,7 +67,7 @@
     
             <br><br>
     
-            <mat-form-field *ngFor="let address of employee.addresses; let i = index" id="state" appearance="fill" style="width: 70%">
+            <mat-form-field id="state" appearance="fill" style="width: 70%">
     
                 <mat-label>State</mat-label>
                 <mat-select [(value)]="address.state" formControlName="state">
@@ -144,7 +144,7 @@
 
             </mat-form-field>
     
-            <mat-form-field *ngFor="let address of employee.addresses; let i = index" id="zip_code" appearance="fill" style="margin-left: 2%; width: 28%">
+            <mat-form-field id="zip_code" appearance="fill" style="margin-left: 2%; width: 28%">
     
                 <mat-label>Zip Code</mat-label>
 
@@ -156,8 +156,14 @@
 
         </div>
 
+        <h1>Employees To Create: {{this.employees.length}}</h1>
+
         <button mat-flat-button color="primary" style="float: right;" type="submit">
             Save Employee
+        </button>
+        
+        <button mat-flat-button color="primary" style="float: right; margin-right: 2%" type="button" (click)="addAnotherEmployee();">
+            <mat-icon>add</mat-icon> Employee
         </button>
 
     </form>
