@@ -4,11 +4,11 @@
         <mat-icon>close</mat-icon>
     </button>
 
-    <h1>Add Employee Details</h1>
+    <form class="form" [formGroup]="newEmployeeForm" (ngSubmit)="createEmployee($event);">       
 
-    <form class="form" [formGroup]="newEmployeeForm" (ngSubmit)="createEmployee($event);">
-
-        <div class="personal_information">
+        <div class="personal_information" *ngFor="let employee of this.employees; let i = index">
+            
+            <h1>Add Employee #{{i+1}}</h1> 
 
             <mat-form-field id="first_name" appearance="fill" style="width: 49%">
 
@@ -32,10 +32,6 @@
 
             <br><br>
             
-        </div>
-
-        <div class="personal_information">
-
             <mat-form-field id="street_address" appearance="fill" style="width: 100%;">
 
                 <mat-label>Street Address</mat-label>

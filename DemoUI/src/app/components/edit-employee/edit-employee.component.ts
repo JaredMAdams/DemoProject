@@ -29,7 +29,6 @@ export class EditEmployeeComponent implements OnInit {
 
   ngOnInit(): void {
     this.employee = this.data.employee;
-    console.log(this.employee);
   }
 
   onClose() {

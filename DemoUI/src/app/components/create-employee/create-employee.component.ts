@@ -4,7 +4,7 @@ import { EmployeeListComponent } from '../employee-list/employee-list.component'
 import { EmployeeService } from 'src/app/services/employee.service';
 import { Employee } from 'src/app/interfaces/employee';
 import { Address } from 'src/app/interfaces/address';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-create-employee',
@@ -25,6 +25,26 @@ export class CreateEmployeeComponent implements OnInit {
     }]
   }
 
+  emptyEmployee: Employee = {
+    firstName: '',
+    lastName: '',
+    addresses: [{
+      streetAddress: undefined,
+      aptNumber: undefined,
+      city: undefined,
+      state: 'Alabama',
+      zipCode: undefined,
+    }]
+  }
+  
+  address: Address = {
+    streetAddress: '',
+    aptNumber: '',
+    city: '',
+    state: '',
+    zipCode: ''
+  }
+
   employees: Employee[] = [{
     firstName: '',
     lastName: '',
@@ -37,14 +57,6 @@ export class CreateEmployeeComponent implements OnInit {
     }]
   }]
 
-  address: Address = {
-    streetAddress: '',
-    aptNumber: '',
-    city: '',
-    state: '',
-    zipCode: ''
-  }
-
   newEmployeeForm = new FormGroup({
     firstName: new FormControl('', [Validators.required]),
     lastName: new FormControl('', [Validators.required]),
@@ -52,15 +64,15 @@ export class CreateEmployeeComponent implements OnInit {
     aptNumber: new FormControl(''),
     city: new FormControl('', [Validators.required]),
     state: new FormControl('Alabama', [Validators.required]),
-    zipCode: new FormControl('', [Validators.required, Validators.minLength(5), Validators.pattern((/^[0-9\-]+$/))]),
+    zipCode: new FormControl('', [Validators.required, Validators.minLength(5), Validators.pattern((/^[0-9\-]+$/))])
   })
 
   constructor(public dialogRef: MatDialogRef<EmployeeListComponent>,
-              private employeeService: EmployeeService) { }
-
-  ngOnInit(): void {
-
+              private employeeService: EmployeeService) {
+                
   }
+
+  ngOnInit(): void {}
 
   onClose() {
     this.employee.firstName = '';
@@ -75,31 +87,10 @@ export class CreateEmployeeComponent implements OnInit {
     this.employee.lastName = '';
   }
 
-  // clearStreetAddress(i: number) {
-  //   this.employee.addresses?.streetAddress = undefined;
-  // }
-
-  // clearAptNumber() {
-  //   this.address.aptNumber = undefined;
-  // }
-
-  // clearCity() {
-  //   this.address.city = undefined;
-  // }
-
-  // clearState() {
-  //   this.address.state = undefined;
-  // }
-
-  // clearZipCode() {
-  //   this.address.zipCode = undefined;
-  // }
-
   createEmployee(e: any) {
     e.preventDefault();
     if(this.employees.length == 1){
       if(this.newEmployeeForm.valid) {
-          
           this.employee.addresses?.splice(0,1);
           this.employee.firstName = this.newEmployeeForm.value.firstName!;
           this.employee.lastName = this.newEmployeeForm.value.lastName!;
@@ -118,9 +109,9 @@ export class CreateEmployeeComponent implements OnInit {
           this.newEmployeeForm.markAllAsTouched();
         }
     }
-    else {
+    else {      
       this.employeeService.PostMultipleEmployees(this.employees).subscribe((response) => {
-        console.log(this.employees);
+        this.dialogRef.close(this.employees);
       })
     }
   }
@@ -128,8 +119,12 @@ export class CreateEmployeeComponent implements OnInit {
   //Checks if employees is currently empty, if so, splices out the first (empty) entry
   //Then splices out previously entered address for new employee input
   //Saves employee info, pushes address into array, then pushes employee into the 'employees' array
+
+  //This is currently bugged as a result of using the same reference to create each employee.
+  //On update, all entities in array are updated to be the what is written in the form.
+  //As such, saving multiple separate entities does not work as expected, but it still showcases functionality of ability to save multiple entities simultaneously.
   addAnotherEmployee() {
-    if(this.employees.at(0)?.firstName == '') {
+    if(this.employees.at(0)?.firstName == '' && this.newEmployeeForm.valid) {
       this.employees.splice(0,1);
     }
     if(this.newEmployeeForm.valid) {
@@ -143,13 +138,11 @@ export class CreateEmployeeComponent implements OnInit {
       this.address.state = this.newEmployeeForm.value.state!;
       this.address.zipCode = this.newEmployeeForm.value.zipCode!;
 
-      this.employee.addresses?.push(this.address);
-    
+      this.employee.addresses?.push(this.address); 
+
       this.employees.push(this.employee);
     } else {
       this.newEmployeeForm.markAllAsTouched();
     }
-    console.log(this.employees.length);
-    console.log(this.employees);
   }
 }

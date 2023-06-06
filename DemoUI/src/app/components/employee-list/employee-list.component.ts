@@ -91,8 +91,16 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     dialogConfig.width = "80%";
     let dialogRef = this.dialog.open(CreateEmployeeComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((newEmployee) => {
-      if(newEmployee.firstName != ''){
+      if(newEmployee.firstName != '' && newEmployee.length == 1){
+        
         this.employees.push(newEmployee);
+        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource.paginator = this.paginator;
+      } else {
+        console.log(newEmployee);
+        for(let employee of newEmployee) {
+          this.employees.push(employee);
+        }
         this.dataSource = new MatTableDataSource(this.employees);
         this.dataSource.paginator = this.paginator;
       }
