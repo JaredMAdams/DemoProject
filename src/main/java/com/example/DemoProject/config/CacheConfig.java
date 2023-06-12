@@ -1,6 +1,6 @@
-package com.example.DemoProject.config;
+package com.example.demoproject.config;
 
-import com.example.DemoProject.entities.Employee;
+import com.example.demoproject.entities.Employee;
 import org.ehcache.config.CacheConfiguration;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;

@@ -1,6 +1,5 @@
-package com.example.DemoProject.entities;
+package com.example.demoproject.entities;
 
-import lombok.Data;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.mapping.Document;

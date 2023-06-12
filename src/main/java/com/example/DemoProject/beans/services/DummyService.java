@@ -1,13 +1,11 @@
-package com.example.DemoProject.beans.services;
+package com.example.demoproject.beans.services;
 
-import com.example.DemoProject.entities.Employee;
+import com.example.demoproject.entities.Employee;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DummyService {
-
     public Employee getDummyEmployee() {
-        Employee dummyEmployee = new Employee("abc123", "John", "Doe");
-        return dummyEmployee;
+        return new Employee("abc123", "John", "Doe");
     }
 }

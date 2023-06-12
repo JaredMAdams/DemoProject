@@ -1,4 +1,4 @@
-package com.example.DemoProject.exceptions;
+package com.example.demoproject.exceptions;
 
 public class InvalidStateException extends RuntimeException{
 

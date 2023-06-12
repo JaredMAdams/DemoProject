@@ -1,10 +1,9 @@
-package com.example.DemoProject.beans.services;
+package com.example.demoproject.beans.services;
 
-import com.example.DemoProject.beans.repositories.EmployeeRepo;
-import com.example.DemoProject.config.ThreadConfig;
-import com.example.DemoProject.entities.Address;
-import com.example.DemoProject.entities.Employee;
-import com.example.DemoProject.exceptions.InvalidStateException;
+import com.example.demoproject.beans.repositories.EmployeeRepo;
+import com.example.demoproject.entities.Address;
+import com.example.demoproject.entities.Employee;
+import com.example.demoproject.exceptions.InvalidStateException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,9 +34,6 @@ class EmployeeServiceTest {
     @InjectMocks
     private EmployeeService employeeService;
 
-    @InjectMocks
-    private ThreadConfig executorService;
-
     private Employee employee;
 
     private List<Employee> employees;
@@ -47,7 +43,7 @@ class EmployeeServiceTest {
     @BeforeEach
     void setUp() {
         employeeRepo = Mockito.mock(EmployeeRepo.class);
-        employeeService = new EmployeeService(employeeRepo);
+        employeeService = new EmployeeService();
         addresses = Arrays.asList(
                 new Address("22", "33", "Austin", "Texas", "55555"),
                 new Address("11", "44", "Queens", "New York", "55555")

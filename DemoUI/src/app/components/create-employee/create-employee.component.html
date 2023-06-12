@@ -136,8 +136,6 @@
                     <mat-option value="Yukon Territory">Yukon Territory</mat-option>
                 </mat-select>
 
-                <mat-error *ngIf="newEmployeeForm.get('state')?.touched && newEmployeeForm.get('state')?.hasError('required')">This field is <strong>required</strong></mat-error>
-
             </mat-form-field>
     
             <mat-form-field id="zip_code" appearance="fill" style="margin-left: 2%; width: 28%">
@@ -146,7 +144,7 @@
 
                 <input matInput placeholder="90007" formControlName="zipCode" autocomplete="off">
 
-                <mat-error *ngIf="newEmployeeForm.get('zipCode')?.touched && newEmployeeForm.get('zipCode')?.hasError('required')">This field is <strong>required</strong></mat-error>
+                <mat-error *ngIf="newEmployeeForm.get('zipCode')?.touched && newEmployeeForm.get('zipCode')?.hasError('required')">This field <strong>requires</strong> a 5 digit number</mat-error>
     
             </mat-form-field>
 

@@ -1,25 +1,24 @@
-package com.example.DemoProject.beans.services;
+package com.example.demoproject.beans.services;
 
-import com.example.DemoProject.beans.repositories.EmployeeRepo;
-import com.example.DemoProject.entities.Employee;
-import com.example.DemoProject.exceptions.InvalidStateException;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demoproject.beans.repositories.EmployeeRepo;
+import com.example.demoproject.entities.Employee;
+import com.example.demoproject.exceptions.InvalidStateException;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.*;
 
 @Service
 public class EmployeeService {
-    @Autowired
-    private final EmployeeRepo employeeRepo;
-
+    @Inject
+    private EmployeeRepo employeeRepo;
     Map<String, String> states = new HashMap<String, String>();
 
-    public EmployeeService(EmployeeRepo employeeRepo) {
-        this.employeeRepo = employeeRepo;
+    //Establishes map used to convert state to state 2 character code
+    public EmployeeService() {
         states.put("Alabama","AL");
         states.put("AL","AL");
         states.put("Alaska","AK");
@@ -180,22 +179,28 @@ public class EmployeeService {
         return this.employeeRepo.findById(employeeId);
     }
 
+    //Calls the "findByAddresses_State" method in order to return a list of employees belonging to a specific state
     public List<Employee> getEmployeesByState(String state) {
         return this.employeeRepo.findByAddresses_State(states.get(state));
     }
 
+    //Calls the "findByAddresses_City" method in order to return a list of employees belonging to a specific city
     public List<Employee> getEmployeesByCity(String city) {
         return this.employeeRepo.findByAddresses_City(city);
     }
 
+    //Calls the "findByAddresses_ZipCode" method in order to return a list of employees belonging to a specific zip code
     public List<Employee> getEmployeesByZipCode(String zipCode) {
         return this.employeeRepo.findByAddresses_ZipCode(zipCode);
     }
-//    @Cacheable(cacheNames = "employeeFirstName", cacheManager = "alternateCacheManager")
+
+    //@Cacheable(cacheNames = "employeeFirstName", cacheManager = "alternateCacheManager") - commented out as a result of not working while ehCache is active
+    //Calls the "findByFirstName" method in order to return a list of employees having a specific first name
     public List<Employee> getEmployeesByFirstName(String firstName) {
         return this.employeeRepo.findByFirstName(firstName);
     }
 
+    //Calls the "findByLastName" method in order to return a list of employees having a specific last name
     public List<Employee> getEmployeesByLastName(String lastName) {
         return this.employeeRepo.findByLastName(lastName);
     }
@@ -203,13 +208,12 @@ public class EmployeeService {
     public List<Employee> getAllEmployees() {
         return this.employeeRepo.findAll();
     }
-
-//    @CachePut(cacheNames = "employeeFirstName", cacheManager = "alternateCacheManager")
+    //@CachePut(cacheNames = "employeeFirstName", cacheManager = "alternateCacheManager") - commented out as a result of not working while ehCache is active
+    //Uses the build in "save" method to create a new employee
     public Employee createEmployee(Employee employee) throws InvalidStateException {
         //Check if user input their state as its full name.
         //If they did, it converts the state into its 2-digit code.
         //If the state does not exist, an InvalidStateException is thrown, telling the user to please enter a valid state.
-
         employee.getAddresses().forEach((address) -> states.entrySet()
                 .stream()
                 .filter(e -> address.getState().equalsIgnoreCase(e.getKey()))
@@ -221,21 +225,30 @@ public class EmployeeService {
                         }
                 )
         );
-
         return this.employeeRepo.save(employee);
     }
 
+    //Method used to create multiple employees from a single submission
     @Async
-    public CompletableFuture<List<Employee>> createMultipleEmployees(List<Employee> employees) {
-        long start = System.currentTimeMillis();
-        System.out.println(start);
-        System.out.println("Saving using thread: " + Thread.currentThread().getName());
-        for (Employee employee: employees) {
-            this.employeeRepo.save(employee);
-        }
-        long end = System.currentTimeMillis();
-        System.out.println("Total time taken: " + (end-start));
-        return CompletableFuture.completedFuture(employees);
+    public Future createMultipleEmployees(List<Employee> employees) throws ExecutionException, InterruptedException {
+        //Creates new executor service, and sets thread pool size to 2.
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+        //This callable loops through the list of employees sent by the user, and calls the "save" method on each of them
+        Callable<List<Employee>> callable = () -> {
+            for(Employee employee : employees) {
+                this.employeeRepo.save(employee);
+            }
+            return null;
+        };
+
+        //Uses the executor service to execute the callable above, returning a future.
+        Future<List<Employee>> future = executorService.submit(callable);
+
+        //Waits until future is complete, then returns the result
+        future.get();
+
+        return future;
     }
 
     public void deleteEmployee(String objectId) {

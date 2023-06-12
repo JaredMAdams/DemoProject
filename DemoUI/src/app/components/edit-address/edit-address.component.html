@@ -122,7 +122,7 @@
 
             <input matInput formControlName="zipCode" autocomplete="off">
 
-            <mat-error *ngIf="newAddressForm.get('zipCode')?.touched && newAddressForm.get('zipCode')?.hasError('required')">This field is <strong>required</strong></mat-error>
+            <mat-error *ngIf="newAddressForm.get('zipCode')?.touched && newAddressForm.get('zipCode')?.hasError('required')">This field <strong>requires</strong> a 5 digit number</mat-error>
 
         </mat-form-field>
 

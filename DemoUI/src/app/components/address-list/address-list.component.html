@@ -84,6 +84,8 @@
     
                 <mat-label>Street Address</mat-label>
                 <input matInput formControlName="streetAddress" autocomplete="off">
+
+                <mat-error *ngIf="newAddressForm.get('streetAddress')?.touched && newAddressForm.get('streetAddress')?.hasError('required')">This field is <strong>required</strong></mat-error>
     
             </mat-form-field>
     
@@ -100,6 +102,8 @@
     
                 <mat-label>City</mat-label>
                 <input matInput formControlName="city" autocomplete="off">
+
+                <mat-error *ngIf="newAddressForm.get('city')?.touched && newAddressForm.get('city')?.hasError('required')">This field is <strong>required</strong></mat-error>
     
             </mat-form-field>
     
@@ -181,6 +185,8 @@
     
                 <mat-label>Zip Code</mat-label>
                 <input matInput formControlName="zipCode" autocomplete="off">
+
+                <mat-error *ngIf="newAddressForm.get('zipCode')?.touched && newAddressForm.get('zipCode')?.hasError('required')">This field <strong>requires</strong> a 5 digit number</mat-error>
     
             </mat-form-field>
     
