@@ -48,8 +48,11 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     }]
   }
 
+  //Datasource for table
   dataSource!: MatTableDataSource<Employee>;
+  //String that represents how the user is attempting to search
   searchBy: string = 'Everyone';
+  //User Input for search function.  Parameter for search function
   searchParam: string = '';
   searchParamState: string = 'Alabama';
 
@@ -65,11 +68,8 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     this.GetEmployees();
   }
 
-  
-
   //opens mat dialog
   //sends employee data based on index clicked from mat table
-  //on close, updates employee to reflect changes to address list
   viewAddresses(employee: Employee) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -82,7 +82,11 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     let dialogRef =this.dialog.open(AddressListComponent, dialogConfig);
   }
 
+  //Setting configuration for the "create-employee" component
   //Creates new employee to add to system
+  //After the dialog reference is closed, loops through returned array of users, adding them to existing employees array
+  //The datasource is then reset to the new array containing all added items
+  //This allows the UI to update without the need to refresh the page in order to see new data
   createEmployee() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -90,14 +94,8 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     dialogConfig.height = "60%";
     dialogConfig.width = "80%";
     let dialogRef = this.dialog.open(CreateEmployeeComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe((newEmployee) => {
-      if(newEmployee.firstName != '' && newEmployee.length == 1){
-        
-        this.employees.push(newEmployee);
-        this.dataSource = new MatTableDataSource(this.employees);
-        this.dataSource.paginator = this.paginator;
-      } else {
-        console.log(newEmployee);
+    dialogRef.afterClosed().subscribe((newEmployee: Employee[]) => {
+      if(newEmployee.length > 0) {
         for(let employee of newEmployee) {
           this.employees.push(employee);
         }
@@ -118,14 +116,12 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
       employee: employee
     }
     let dialogRef = this.dialog.open(EditEmployeeComponent, dialogConfig);
-     
   }
 
   //Deletes an employee from the list
   //Splices that data from employees array
   //Updates DataSource and paginator to reflect new employees array
   deleteEmployee(employeeId: string, i: number) {
-    console.log("deleting Employee");
     this.employeeService.deleteEmployee(employeeId).subscribe(() => {
       this.employees.splice(i, 1);
       this.dataSource = new MatTableDataSource(this.employees);
@@ -175,6 +171,8 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     })    
   }
 
+  //Search Function by First Name
+  //Updates datasource based on new list obtained from database
   GetEmployeesByFirstName() {
     this.employeeService.GetEmployeesByFirstName(this.searchParam).subscribe((newList: Employee[]) => {
       this.employees = newList;
@@ -184,6 +182,8 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     })
   }
 
+  //Search Function by Last Name
+  //Updates datasource based on new list obtained from database
   GetEmployeesByLastName() {
     this.employeeService.GetEmployeesByLastName(this.searchParam).subscribe((newList: Employee[]) => {
       this.employees = newList;
@@ -193,6 +193,8 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     })
   }
 
+  //Search Function by State
+  //Updates datasource based on new list obtained from database
   GetEmployeesByState() {
     this.employeeService.GetEmployeesByState(this.searchParamState).subscribe((newList: Employee[]) => {
       this.employees = newList;
@@ -202,6 +204,8 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     })
   }
 
+  //Search Function by City
+  //Updates datasource based on new list obtained from database
   GetEmployeesByCity() {
     this.employeeService.GetEmployeesByCity(this.searchParam).subscribe((newList: Employee[]) => {
       this.employees = newList;
@@ -211,6 +215,8 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     })
   }
 
+  //Search Function by Zip Code
+  //Updates datasource based on new list obtained from database
   GetEmployeesByZipCode() {
     this.employeeService.GetEmployeesByZipCode(this.searchParam).subscribe((newList: Employee[]) => {
       this.employees = newList;

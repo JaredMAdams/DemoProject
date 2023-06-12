@@ -9,7 +9,6 @@ import org.ehcache.config.units.MemoryUnit;
 import org.ehcache.jsr107.Eh107Configuration;
 import javax.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

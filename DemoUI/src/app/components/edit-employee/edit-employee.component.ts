@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Employee } from 'src/app/interfaces/employee';
 import { EmployeeService } from 'src/app/services/employee.service';
@@ -23,6 +24,11 @@ export class EditEmployeeComponent implements OnInit {
     }]
   }
 
+  updatedEmployeeForm = new FormGroup({
+    firstName: new FormControl(this.data.employee.firstName, [Validators.required]),
+    lastName: new FormControl(this.data.employee.lastName, [Validators.required])
+  }) 
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               public dialogRef: MatDialogRef<EditEmployeeComponent>,
               private employeeService: EmployeeService) { }
@@ -31,22 +37,21 @@ export class EditEmployeeComponent implements OnInit {
     this.employee = this.data.employee;
   }
 
+  //Used for closing the edit employee dialog
   onClose() {
     this.dialogRef.close();
   }
 
-  clearFirstName() {
-    this.employee.firstName = '';
+  //Used to close the dialog and save any changes made
+  //Ensures that all fields are valid, in this case, makes sure nothing is left empty
+  saveChanges(e: any) {
+    e.preventDefault();
+    if(this.updatedEmployeeForm.valid) {
+      this.employee.firstName = this.updatedEmployeeForm.value.firstName;
+      this.employee.lastName = this.updatedEmployeeForm.value.lastName;
+      this.employeeService.PostEmployee(this.employee).subscribe(() => {
+        this.onClose();
+      })
+    }
   }
-
-  clearLastName() {
-    this.employee.lastName = '';
-  }
-
-  saveChanges() {
-    this.employeeService.PostEmployee(this.employee).subscribe(() => {
-      this.onClose();
-    })
-  }
-
 }

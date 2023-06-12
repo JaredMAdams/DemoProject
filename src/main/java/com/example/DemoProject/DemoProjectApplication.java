@@ -1,4 +1,4 @@
-package com.example.DemoProject;
+package com.example.demoproject;
 
 import com.example.DemoProject.beans.services.EmployeeService;
 import com.example.DemoProject.entities.Employee;
@@ -7,10 +7,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.List;
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
+@EnableAsync
 public class DemoProjectApplication implements CommandLineRunner {
 
 	private final EmployeeService employeeService;

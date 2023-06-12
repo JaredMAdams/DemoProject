@@ -2,7 +2,6 @@ package com.example.DemoProject.beans.controllers;
 
 import com.example.DemoProject.beans.services.EmployeeService;
 import com.example.DemoProject.entities.Employee;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +43,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/zip-code/{zipCode}")
-    public ResponseEntity<List<Employee>> getEmployeesByZipCode(@PathVariable Integer zipCode) {
+    public ResponseEntity<List<Employee>> getEmployeesByZipCode(@PathVariable String zipCode) {
         return ResponseEntity.ok(this.employeeService.getEmployeesByZipCode(zipCode));
     }
 
@@ -71,8 +70,7 @@ public class EmployeeController {
     @PostMapping("/executor")
     public ResponseEntity<List<Employee>> createMultipleEmployees(@RequestBody List<Employee> employees) {
         CompletableFuture<List<Employee>> employees1 = employeeService.createMultipleEmployees(employees);
-        CompletableFuture<List<Employee>> employees2 = employeeService.createMultipleEmployees(employees);
-        CompletableFuture.allOf(employees1, employees2).join();
+        employees1.join();
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

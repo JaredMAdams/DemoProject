@@ -1,22 +1,19 @@
 package com.example.DemoProject.beans.services;
 
 import com.example.DemoProject.beans.repositories.EmployeeRepo;
-import com.example.DemoProject.entities.Address;
 import com.example.DemoProject.entities.Employee;
 import com.example.DemoProject.exceptions.InvalidStateException;
-import org.hibernate.annotations.Cache;
-import org.springframework.cache.annotation.CachePut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
-
+    @Autowired
     private final EmployeeRepo employeeRepo;
 
     Map<String, String> states = new HashMap<String, String>();
@@ -184,14 +181,14 @@ public class EmployeeService {
     }
 
     public List<Employee> getEmployeesByState(String state) {
-        return this.employeeRepo.findByAddresses_State(state);
+        return this.employeeRepo.findByAddresses_State(states.get(state));
     }
 
     public List<Employee> getEmployeesByCity(String city) {
         return this.employeeRepo.findByAddresses_City(city);
     }
 
-    public List<Employee> getEmployeesByZipCode(Integer zipCode) {
+    public List<Employee> getEmployeesByZipCode(String zipCode) {
         return this.employeeRepo.findByAddresses_ZipCode(zipCode);
     }
 //    @Cacheable(cacheNames = "employeeFirstName", cacheManager = "alternateCacheManager")
@@ -233,7 +230,9 @@ public class EmployeeService {
         long start = System.currentTimeMillis();
         System.out.println(start);
         System.out.println("Saving using thread: " + Thread.currentThread().getName());
-        employees = employeeRepo.saveAll(employees);
+        for (Employee employee: employees) {
+            this.employeeRepo.save(employee);
+        }
         long end = System.currentTimeMillis();
         System.out.println("Total time taken: " + (end-start));
         return CompletableFuture.completedFuture(employees);

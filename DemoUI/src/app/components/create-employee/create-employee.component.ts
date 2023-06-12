@@ -79,18 +79,14 @@ export class CreateEmployeeComponent implements OnInit {
     this.dialogRef.close(this.employee);
   }
 
-  clearFirstName() {
-    this.newEmployeeForm.value.firstName = '';
-  }
-
-  clearLastName() {
-    this.employee.lastName = '';
-  }
-
+  //Checks to see if only one employee is being added.
+  //If so, uses Post Employee to add that employee to the database, then closes its reference.
+  //If there is more than one, uses PostMultipleEmployees function to add more than one employee at a time.
   createEmployee(e: any) {
     e.preventDefault();
     if(this.employees.length == 1){
       if(this.newEmployeeForm.valid) {
+          this.employees.splice(0, 1);
           this.employee.addresses?.splice(0,1);
           this.employee.firstName = this.newEmployeeForm.value.firstName!;
           this.employee.lastName = this.newEmployeeForm.value.lastName!;
@@ -101,9 +97,10 @@ export class CreateEmployeeComponent implements OnInit {
           this.address.zipCode = this.newEmployeeForm.value.zipCode!;
 
           this.employee.addresses?.push(this.address);
+          this.employees.push(this.employee);
           
           this.employeeService.PostEmployee(this.employee).subscribe(newEmployee => {
-          this.dialogRef.close(this.employee);
+            this.dialogRef.close(this.employees);
           })
         } else {
           this.newEmployeeForm.markAllAsTouched();

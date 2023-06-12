@@ -23,11 +23,14 @@ export class EditAddressComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  //If close button is clicked, resets streetAddress to '', stopping any changes from being saved.
   onClose() {
     this.data.streetAddress = '';
     this.dialogRef.close(this.data);
   }
 
+  //Uses "newAddressForm" to ensure that all values entered are valid.
+  //If they are, data is updated and returned back to the parent.
   updateAddress(e: any) {
     e.preventDefault();
     if(this.newAddressForm.valid) {
