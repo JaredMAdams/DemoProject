@@ -1,0 +1,38 @@
+.header {
+    text-align: center;
+}
+
+.table {
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+#paginator {
+    float: right;
+}
+
+.mat-column-addresses {
+    width: 15%;
+}
+
+.mat-column-edit {
+    
+    width: 5%;
+}
+
+.mat-column-delete {
+    width: 5%;
+}
+
+.search-create-div {
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+}

@@ -1,0 +1,226 @@
+<div class="main">
+
+    <button id="close" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="onClose()">
+        <mat-icon>close</mat-icon>
+    </button>
+
+    <h1 class="header">{{data.employee.firstName}} {{data.employee.lastName}}'s Addresses</h1>
+    
+    <div class="table">
+
+        <table mat-table *ngIf="data.employee.addresses.length != 0" [dataSource]="data.employee.addresses">
+
+            <ng-container matColumnDef="number">
+                <th mat-header-cell *matHeaderCellDef="">No.</th>
+                <td mat-cell *matCellDef="let address; let i = index">{{i + 1}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="street_address">
+                <th mat-header-cell *matHeaderCellDef="">Street Address</th>
+                <td mat-cell *matCellDef="let address">{{address.streetAddress}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="apt_number">
+                <th mat-header-cell *matHeaderCellDef="">Apt. Number</th>
+                <td mat-cell *matCellDef="let address">{{address.aptNumber}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="city">
+                <th mat-header-cell *matHeaderCellDef="">City</th>
+                <td mat-cell *matCellDef="let address">{{address.city}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="state">
+                <th mat-header-cell *matHeaderCellDef="">State</th>
+                <td mat-cell *matCellDef="let address">{{address.state}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="zip_code">
+                <th mat-header-cell *matHeaderCellDef="">Zip Code</th>
+                <td mat-cell *matCellDef="let address">{{address.zipCode}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef=""></th>
+                <td mat-cell *matCellDef="let address, let i = index">
+
+                    <button mat-icon-button color="primary" aria-label="icon button with an open in new tab icon" (click)="editAddress(address, i)">
+                            <mat-icon>edit</mat-icon>
+                    </button>
+
+                </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let address; let i = index" (click)="deleteAddress(i)">
+                    <button mat-icon-button color="primary">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+
+        <h2 *ngIf="data.employee.addresses.length == 0">This Employee Has No Addresses On File</h2>
+
+    </div>
+
+    <br>
+    
+    <form class="form" [formGroup]="newAddressForm" (ngSubmit)="saveAddress($event)">
+
+        <div class="table" *ngIf="this.addressSpecs == true">
+
+            <h2>Add New Address</h2>
+    
+            <br><br>
+    
+            <mat-form-field id="street_address" appearance="fill" style="width: 70%;">
+    
+                <mat-label>Street Address</mat-label>
+                <input matInput formControlName="streetAddress" autocomplete="off">
+
+                <mat-error *ngIf="newAddressForm.get('streetAddress')?.touched && newAddressForm.get('streetAddress')?.hasError('required')">This field is <strong>required</strong></mat-error>
+    
+            </mat-form-field>
+    
+            <mat-form-field id="apt_number" appearance="fill" style="width:28%; margin-left: 2%;">
+    
+                <mat-label>Apt. Number</mat-label>
+                <input matInput formControlName="aptNumber" autocomplete="off">
+    
+            </mat-form-field>
+    
+            <br><br>
+    
+            <mat-form-field id="city" appearance="fill" style="width: 30%">
+    
+                <mat-label>City</mat-label>
+                <input matInput formControlName="city" autocomplete="off">
+
+                <mat-error *ngIf="newAddressForm.get('city')?.touched && newAddressForm.get('city')?.hasError('required')">This field is <strong>required</strong></mat-error>
+    
+            </mat-form-field>
+    
+            <mat-form-field id="state" appearance="fill" style="width: 50%; margin-left: 2%;">
+    
+                <mat-label>State</mat-label>
+                <mat-select formControlName="state">
+                    <mat-option value="Alabama">Alabama</mat-option>
+                    <mat-option value="Alaska">Alaska</mat-option>
+                    <mat-option value="Alberta">Alberta</mat-option>
+                    <mat-option value="American Samoa">American Samoa</mat-option>
+                    <mat-option value="Arizona">Arizona</mat-option>
+                    <mat-option value="Armed Forces (AE)">Armed Forces (AE)</mat-option>
+                    <mat-option value="Armed Forces Americas">Armed Forces Americas</mat-option>
+                    <mat-option value="Armed Forces Pacific">Armed Forces Pacific</mat-option>
+                    <mat-option value="British Columbia">British Columbia</mat-option>
+                    <mat-option value="California">California</mat-option>
+                    <mat-option value="Colorado">Colorado</mat-option>
+                    <mat-option value="Connecticut">Connecticut</mat-option>
+                    <mat-option value="Georgia">Georgia</mat-option>
+                    <mat-option value="Guam">Guam</mat-option>
+                    <mat-option value="Hawaii">Hawaii</mat-option>
+                    <mat-option value="Idaho">Idaho</mat-option>
+                    <mat-option value="Illinois">Illinois</mat-option>
+                    <mat-option value="Indiana">Indiana</mat-option>
+                    <mat-option value="Iowa">Iowa</mat-option>
+                    <mat-option value="Kansas">Kansas</mat-option>
+                    <mat-option value="Kentucky">Kentucky</mat-option>
+                    <mat-option value="Louisiana">Louisiana</mat-option>
+                    <mat-option value="Maine">Maine</mat-option>
+                    <mat-option value="Manitoba">Manitoba</mat-option>
+                    <mat-option value="Maryland">Maryland</mat-option>
+                    <mat-option value="Massachusetts">Massachusetts</mat-option>
+                    <mat-option value="Michigan">Michigan</mat-option>
+                    <mat-option value="Minnesota">Minnesota</mat-option>
+                    <mat-option value="Mississippi">Mississippi</mat-option>
+                    <mat-option value="Missouri">Missouri</mat-option>
+                    <mat-option value="Montana">Montana</mat-option>
+                    <mat-option value="Nebraska">Nebraska</mat-option>
+                    <mat-option value="Nevada">Nevada</mat-option>
+                    <mat-option value="New Brunswick">New Brunswick</mat-option>
+                    <mat-option value="New Hampshire">New Hampshire</mat-option>
+                    <mat-option value="New Jersey">New Jersey</mat-option>
+                    <mat-option value="New Mexico">New Mexico</mat-option>
+                    <mat-option value="New York">New York</mat-option>
+                    <mat-option value="Newfoundland">Newfoundland</mat-option>
+                    <mat-option value="North Carolina">North Carolina</mat-option>
+                    <mat-option value="North Dakota">North Dakota</mat-option>
+                    <mat-option value="Northwest Territories">Northwest Territories</mat-option>
+                    <mat-option value="Nova Scotia">Nova Scotia</mat-option>
+                    <mat-option value="Nunavut">Nunavut</mat-option>
+                    <mat-option value="Ohio">Ohio</mat-option>
+                    <mat-option value="Oklahoma">Oklahoma</mat-option>
+                    <mat-option value="Ontario">Ontario</mat-option>
+                    <mat-option value="Oregon">Oregon</mat-option>
+                    <mat-option value="Pennsylvania">Pennsylvania</mat-option>
+                    <mat-option value="Prince Edward Island">Prince Edward Island</mat-option>
+                    <mat-option value="Puerto Rico">Puerto Rico</mat-option>
+                    <mat-option value="Quebec">Quebec</mat-option>
+                    <mat-option value="Rhode Island">Rhode Island</mat-option>
+                    <mat-option value="Saskatchewan">Saskatchewan</mat-option>
+                    <mat-option value="South Carolina">South Carolina</mat-option>
+                    <mat-option value="South Dakota">South Dakota</mat-option>
+                    <mat-option value="Tennessee">Tennessee</mat-option>
+                    <mat-option value="Texas">Texas</mat-option>
+                    <mat-option value="Utah">Utah</mat-option>
+                    <mat-option value="Vermont">Vermont</mat-option>
+                    <mat-option value="Virgin Islands">Virgin Islands</mat-option>
+                    <mat-option value="Virginia">Virginia</mat-option>
+                    <mat-option value="Washington">Washington</mat-option>
+                    <mat-option value="West Virginia">West Virginia</mat-option>
+                    <mat-option value="Wisconsin">Wisconsin</mat-option>
+                    <mat-option value="Wyoming">Wyoming</mat-option>
+                    <mat-option value="Yukon Territory">Yukon Territory</mat-option>
+                </mat-select>
+            </mat-form-field>
+    
+            <mat-form-field id="zip_code" appearance="fill" style="width: 16%; margin-left: 2%;">
+    
+                <mat-label>Zip Code</mat-label>
+                <input matInput formControlName="zipCode" autocomplete="off">
+
+                <mat-error *ngIf="newAddressForm.get('zipCode')?.touched && newAddressForm.get('zipCode')?.hasError('required')">This field <strong>requires</strong> a 5 digit number</mat-error>
+    
+            </mat-form-field>
+    
+        </div>
+    
+        <br><br>
+    
+        <div class="table">
+    
+            <button *ngIf="addressSpecs == true" mat-flat-button color="primary" style="float: right; margin-left: 2%;">
+                Save Address
+            </button>
+    
+        </div>
+        
+
+    </form>
+
+    <div class="table">
+
+        <button mat-flat-button color="primary" style="float: left; position: relative; bottom: 0%" (click)="addAddress();" *ngIf="addressSpecs==false">
+            <mat-icon>add</mat-icon>Add Address
+        </button>
+
+        <button mat-flat-button color="primary" style="float: left; position: relative; bottom: 0%" (click)="cancelAddAddress();" *ngIf="addressSpecs==true">
+            <mat-icon>remove</mat-icon>Cancel
+        </button>
+        
+        <button mat-flat-button color="primary" style="float: right;" (click)="saveChanges();" *ngIf="addressSpecs==false">
+            <mat-icon>save</mat-icon>Save Changes
+        </button>
+
+    </div>
+    
+    
+
+</div>
