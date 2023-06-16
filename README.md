@@ -31,3 +31,10 @@ Sample project to create an application which will carry out CRUD operations on 
 8. Move all the logic from Controller to Service
 9. Add Getters and Setters instead of lombok
 
+06/16/2023
+1. Change search by everyone to search by all
+2. There should be a cancel option in all the pop up windows.
+3. Add New Employee. What is the functionality of "+Employee" button?
+4. As soon as you save an employee. Refresh the list
+5. Search should be a like or contains search. Currently search for zip code, state and city is failing
+6. Create an enum for states and use it
