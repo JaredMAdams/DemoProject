@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { States } from 'src/app/enums/states.enum';
 
 @Component({
   selector: 'app-edit-address',
@@ -8,6 +9,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./edit-address.component.css']
 })
 export class EditAddressComponent implements OnInit {
+
+  public states = Object.values(States);
 
   newAddressForm = new FormGroup({
     streetAddress: new FormControl(this.data.address.streetAddress, [Validators.required]),

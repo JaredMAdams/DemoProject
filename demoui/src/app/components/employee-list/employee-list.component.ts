@@ -140,7 +140,7 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
         this.GetEmployeesByLastName();
         break;
       }
-      case 'Everyone': {
+      case 'All': {
         this.GetEmployees();
         break;
       }

@@ -8,6 +8,7 @@ import { Employee } from 'src/app/interfaces/employee';
 import { Address } from 'src/app/interfaces/address';
 import { EditAddressComponent } from '../edit-address/edit-address.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { States } from 'src/app/enums/states.enum';
 
 @Component({
   selector: 'app-address-list',
@@ -18,6 +19,8 @@ export class AddressListComponent implements OnInit {
 
   displayedColumns: string[] = ['number', 'street_address', 'apt_number', 'city', 'state', 'zip_code', 'edit', 'delete'];
   addressSpecs: boolean = false;
+
+  public states = Object.values(States);
 
   @ViewChild(MatTable) table!: MatTable<any>;
 
@@ -63,6 +66,7 @@ export class AddressListComponent implements OnInit {
       }
     }
     this.employee = this.data.employee;
+    
   }
 
   onClose() {

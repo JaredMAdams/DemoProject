@@ -5,6 +5,9 @@ import { EmployeeService } from 'src/app/services/employee.service';
 import { Employee } from 'src/app/interfaces/employee';
 import { Address } from 'src/app/interfaces/address';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { EmployeeModel } from 'src/app/models/employee.model';
+import { AddressModel } from 'src/app/models/address.model';
+import { States } from 'src/app/enums/states.enum';
 
 @Component({
   selector: 'app-create-employee',
@@ -13,102 +16,61 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 })
 export class CreateEmployeeComponent implements OnInit {
 
-  employee: Employee = {
-    firstName: '',
-    lastName: '',
-    addresses: [{
-      streetAddress: undefined,
-      aptNumber: undefined,
-      city: undefined,
-      state: 'Alabama',
-      zipCode: undefined,
-    }]
-  }
+  employeeModel = new EmployeeModel();
+  addressModel = new AddressModel();
 
-  emptyEmployee: Employee = {
-    firstName: '',
-    lastName: '',
-    addresses: [{
-      streetAddress: undefined,
-      aptNumber: undefined,
-      city: undefined,
-      state: 'Alabama',
-      zipCode: undefined,
-    }]
-  }
+  employeeArray: Employee[] = [];
+  addressArray: Address[] = []
   
-  address: Address = {
-    streetAddress: '',
-    aptNumber: '',
-    city: '',
-    state: '',
-    zipCode: ''
-  }
+  public states = Object.values(States);
 
-  employees: Employee[] = [{
-    firstName: '',
-    lastName: '',
-    addresses: [{
-      streetAddress: undefined,
-      aptNumber: undefined,
-      city: undefined,
-      state: 'Alabama',
-      zipCode: undefined,
-    }]
-  }]
-
-  newEmployeeForm = new FormGroup({
-    firstName: new FormControl('', [Validators.required]),
-    lastName: new FormControl('', [Validators.required]),
-    streetAddress: new FormControl('', [Validators.required]),
-    aptNumber: new FormControl(''),
-    city: new FormControl('', [Validators.required]),
-    state: new FormControl('Alabama', [Validators.required]),
-    zipCode: new FormControl('', [Validators.required, Validators.minLength(5), Validators.pattern((/^[0-9\-]+$/))])
-  })
+  newEmployeeForm!: FormGroup;
 
   constructor(public dialogRef: MatDialogRef<EmployeeListComponent>,
-              private employeeService: EmployeeService) {
-                
+              private employeeService: EmployeeService) {}
+
+  ngOnInit(): void {
+    this.employeeArray.push(this.employeeModel);
+    this.addressArray.push(this.addressModel);
+    this.buildForm();
   }
 
-  ngOnInit(): void {}
-
+  //Closes the dialog without making any changes to the database
   onClose() {
-    this.employee.firstName = '';
-    this.dialogRef.close(this.employee);
+    this.employeeModel.firstName = '';
+    this.dialogRef.close(this.employeeModel);
   }
 
   //Checks to see if only one employee is being added.
   //If so, uses Post Employee to add that employee to the database, then closes its reference.
   //If there is more than one, uses PostMultipleEmployees function to add more than one employee at a time.
-  createEmployee(e: any) {
+  //Both ways check to make sure that the entered employee is valid.
+  createEmployeeModel(e: any) {
     e.preventDefault();
-    if(this.employees.length == 1){
+    if(this.employeeArray.length == 1) {
+      
       if(this.newEmployeeForm.valid) {
-          this.employees.splice(0, 1);
-          this.employee.addresses?.splice(0,1);
-          this.employee.firstName = this.newEmployeeForm.value.firstName!;
-          this.employee.lastName = this.newEmployeeForm.value.lastName!;
-          this.address.streetAddress = this.newEmployeeForm.value.streetAddress!;
-          this.address.aptNumber = this.newEmployeeForm.value.aptNumber!;
-          this.address.city = this.newEmployeeForm.value.city!;
-          this.address.state = this.newEmployeeForm.value.state!;
-          this.address.zipCode = this.newEmployeeForm.value.zipCode!;
-
-          this.employee.addresses?.push(this.address);
-          this.employees.push(this.employee);
+          this.employeeArray.splice(0, 1);
+          this.setEmployee();
           
-          this.employeeService.PostEmployee(this.employee).subscribe(newEmployee => {
-            this.dialogRef.close(this.employees);
+          this.employeeService.PostEmployee(this.employeeModel).subscribe(newEmployee => {
+            this.dialogRef.close(this.employeeArray);
           })
         } else {
           this.newEmployeeForm.markAllAsTouched();
         }
     }
-    else {      
-      this.employeeService.PostMultipleEmployees(this.employees).subscribe((response) => {
-        this.dialogRef.close(this.employees);
+    else {
+      this.employeeArray.splice(0,1);
+
+      if(this.newEmployeeForm.valid) {
+        this.setEmployee();
+      } else {
+        this.newEmployeeForm.markAllAsTouched();
+      }
+
+      this.employeeService.PostMultipleEmployees(this.employeeArray).subscribe((response) => {
+        this.dialogRef.close(this.employeeArray);
       })
     }
   }
@@ -116,30 +78,47 @@ export class CreateEmployeeComponent implements OnInit {
   //Checks if employees is currently empty, if so, splices out the first (empty) entry
   //Then splices out previously entered address for new employee input
   //Saves employee info, pushes address into array, then pushes employee into the 'employees' array
-
-  //This is currently bugged as a result of using the same reference to create each employee.
   //On update, all entities in array are updated to be the what is written in the form.
   //As such, saving multiple separate entities does not work as expected, but it still showcases functionality of ability to save multiple entities simultaneously.
-  addAnotherEmployee() {
-    if(this.employees.at(0)?.firstName == '' && this.newEmployeeForm.valid) {
-      this.employees.splice(0,1);
-    }
+  addEmployee() {
     if(this.newEmployeeForm.valid) {
-      this.employee.addresses?.splice(0,1);
-
-      this.employee.firstName = this.newEmployeeForm.value.firstName!;
-      this.employee.lastName = this.newEmployeeForm.value.lastName!;
-      this.address.streetAddress = this.newEmployeeForm.value.streetAddress!;
-      this.address.aptNumber = this.newEmployeeForm.value.aptNumber!;
-      this.address.city = this.newEmployeeForm.value.city!;
-      this.address.state = this.newEmployeeForm.value.state!;
-      this.address.zipCode = this.newEmployeeForm.value.zipCode!;
-
-      this.employee.addresses?.push(this.address); 
-
-      this.employees.push(this.employee);
+      this.setEmployee();
+      this.buildForm();
+      this.employeeModel = new EmployeeModel();
+      this.addressModel = new AddressModel();
+      console.log(this.employeeArray);
     } else {
       this.newEmployeeForm.markAllAsTouched();
     }
+    
+  }
+
+  //Once a method has validated that the form group passes all requirements, this method sets the employee model to the entered values, and then pushes into our data array
+  setEmployee() {
+      this.employeeModel.firstName = this.newEmployeeForm.value.firstName!;
+      this.employeeModel.lastName = this.newEmployeeForm.value.lastName!;
+      this.addressModel.streetAddress = this.newEmployeeForm.value.streetAddress!;
+      this.addressModel.aptNumber = this.newEmployeeForm.value.aptNumber!;
+      this.addressModel.city = this.newEmployeeForm.value.city!;
+      this.addressModel.state = this.newEmployeeForm.value.state!;
+      this.addressModel.zipCode = this.newEmployeeForm.value.zipCode!;
+
+      this.employeeModel.addresses.push(this.addressModel); 
+
+      this.employeeArray.push(this.employeeModel);
+  }
+
+  //Dynamically builds a form group.
+  //Allows for more than one employee to be entered at a time
+  buildForm() {
+    this.newEmployeeForm = new FormGroup({
+      firstName: new FormControl('', [Validators.required]),
+      lastName: new FormControl('', [Validators.required]),
+      streetAddress: new FormControl('', [Validators.required]),
+      aptNumber: new FormControl(''),
+      city: new FormControl('', [Validators.required]),
+      state: new FormControl('Alabama', [Validators.required]),
+      zipCode: new FormControl('', [Validators.required, Validators.minLength(5), Validators.pattern((/^[0-9\-]+$/))])
+    })
   }
 }
