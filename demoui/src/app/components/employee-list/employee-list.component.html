@@ -21,7 +21,7 @@
 
         </mat-form-field>
 
-        <mat-form-field *ngIf="this.searchBy != 'Everyone' && this.searchBy != 'State'" style="margin-left: 2%">
+        <mat-form-field *ngIf="this.searchBy != 'All' && this.searchBy != 'State'" style="margin-left: 2%">
 
             <input matInput placeholder="Search..." [(ngModel)]="this.searchParam" appearance="fill">
 

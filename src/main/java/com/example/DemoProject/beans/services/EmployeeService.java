@@ -186,23 +186,23 @@ public class EmployeeService {
 
     //Calls the "findByAddresses_City" method in order to return a list of employees belonging to a specific city
     public List<Employee> getEmployeesByCity(String city) {
-        return this.employeeRepo.findByAddresses_City(city);
+        return this.employeeRepo.findByAddresses_CityLike(city);
     }
 
     //Calls the "findByAddresses_ZipCode" method in order to return a list of employees belonging to a specific zip code
     public List<Employee> getEmployeesByZipCode(String zipCode) {
-        return this.employeeRepo.findByAddresses_ZipCode(zipCode);
+        return this.employeeRepo.findByAddresses_ZipCodeLike(zipCode);
     }
 
     //@Cacheable(cacheNames = "employeeFirstName", cacheManager = "alternateCacheManager") - commented out as a result of not working while ehCache is active
     //Calls the "findByFirstName" method in order to return a list of employees having a specific first name
     public List<Employee> getEmployeesByFirstName(String firstName) {
-        return this.employeeRepo.findByFirstName(firstName);
+        return this.employeeRepo.findByFirstNameLike(firstName);
     }
 
     //Calls the "findByLastName" method in order to return a list of employees having a specific last name
     public List<Employee> getEmployeesByLastName(String lastName) {
-        return this.employeeRepo.findByLastName(lastName);
+        return this.employeeRepo.findByLastNameLike(lastName);
     }
 
     public List<Employee> getAllEmployees() {
@@ -243,7 +243,7 @@ public class EmployeeService {
     public void deleteEmployee(String objectId) {
         this.employeeRepo.deleteById(objectId);
     }
-    
+
     //Check if user input their state as its full name.
     //If they did, it converts the state into its 2-digit code.
     //If the state does not exist, an InvalidStateException is thrown, telling the user to please enter a valid state.

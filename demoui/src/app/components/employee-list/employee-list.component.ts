@@ -51,7 +51,7 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
   //Datasource for table
   dataSource!: MatTableDataSource<Employee>;
   //String that represents how the user is attempting to search
-  searchBy: string = 'Everyone';
+  searchBy: string = 'All';
   //User Input for search function.  Parameter for search function
   searchParam: string = '';
   searchParamState: string = 'Alabama';
