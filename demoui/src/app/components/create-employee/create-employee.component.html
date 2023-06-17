@@ -84,6 +84,10 @@
             </mat-form-field>
 
         </div>
+        
+        <button mat-flat-button style="float: right; margin-left: 1%; background-color: #b5b5b5;" (click)="onClose()">
+            Cancel
+        </button>
 
         <button mat-flat-button color="primary" style="float: right;" type="submit" *ngIf="this.employeeArray.length == 1">
             Save Employee

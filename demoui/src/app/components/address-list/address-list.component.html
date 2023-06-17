@@ -141,12 +141,17 @@
     </form>
 
     <div class="table">
+        
+        <button mat-flat-button *ngIf="addressSpecs == false" style="float: right; margin-left: 1%; background-color: #b5b5b5;" (click)="onClose()">
+            Cancel
+        </button>
+        
 
         <button mat-flat-button color="primary" style="float: left; position: relative; bottom: 0%" (click)="addAddress();" *ngIf="addressSpecs==false">
             <mat-icon>add</mat-icon>Add Address
         </button>
 
-        <button mat-flat-button color="primary" style="float: left; position: relative; bottom: 0%" (click)="cancelAddAddress();" *ngIf="addressSpecs==true">
+        <button mat-flat-button style="float: left; position: relative; bottom: 0%; background-color: #b5b5b5;" (click)="cancelAddAddress();" *ngIf="addressSpecs==true">
             <mat-icon>remove</mat-icon>Cancel
         </button>
         

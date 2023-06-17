@@ -211,20 +211,8 @@ public class EmployeeService {
     //@CachePut(cacheNames = "employeeFirstName", cacheManager = "alternateCacheManager") - commented out as a result of not working while ehCache is active
     //Uses the build in "save" method to create a new employee
     public Employee createEmployee(Employee employee) throws InvalidStateException {
-        //Check if user input their state as its full name.
-        //If they did, it converts the state into its 2-digit code.
-        //If the state does not exist, an InvalidStateException is thrown, telling the user to please enter a valid state.
-        employee.getAddresses().forEach((address) -> states.entrySet()
-                .stream()
-                .filter(e -> address.getState().equalsIgnoreCase(e.getKey()))
-                .findFirst()
-                .ifPresentOrElse(
-                        (key) -> address.setState(key.getValue()),
-                        () -> {
-                            throw new InvalidStateException("Please Enter a Valid State");
-                        }
-                )
-        );
+
+        convertStateToCode(employee);
         return this.employeeRepo.save(employee);
     }
 
@@ -237,6 +225,7 @@ public class EmployeeService {
         //This callable loops through the list of employees sent by the user, and calls the "save" method on each of them
         Callable<List<Employee>> callable = () -> {
             for(Employee employee : employees) {
+                convertStateToCode(employee);
                 this.employeeRepo.save(employee);
             }
             return null;
@@ -253,5 +242,22 @@ public class EmployeeService {
 
     public void deleteEmployee(String objectId) {
         this.employeeRepo.deleteById(objectId);
+    }
+    
+    //Check if user input their state as its full name.
+    //If they did, it converts the state into its 2-digit code.
+    //If the state does not exist, an InvalidStateException is thrown, telling the user to please enter a valid state.
+    private void convertStateToCode(Employee employee) {
+        employee.getAddresses().forEach((address) -> states.entrySet()
+                .stream()
+                .filter(e -> address.getState().equalsIgnoreCase(e.getKey()))
+                .findFirst()
+                .ifPresentOrElse(
+                        (key) -> address.setState(key.getValue()),
+                        () -> {
+                            throw new InvalidStateException("Please Enter a Valid State");
+                        }
+                )
+        );
     }
 }
