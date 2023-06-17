@@ -22,6 +22,7 @@ export class CreateEmployeeComponent implements OnInit {
   employeeArray: Employee[] = [];
   addressArray: Address[] = []
   
+  //Instantiates our enum
   public states = Object.values(States);
 
   newEmployeeForm!: FormGroup;
@@ -75,22 +76,19 @@ export class CreateEmployeeComponent implements OnInit {
     }
   }
 
-  //Checks if employees is currently empty, if so, splices out the first (empty) entry
-  //Then splices out previously entered address for new employee input
-  //Saves employee info, pushes address into array, then pushes employee into the 'employees' array
-  //On update, all entities in array are updated to be the what is written in the form.
-  //As such, saving multiple separate entities does not work as expected, but it still showcases functionality of ability to save multiple entities simultaneously.
+  //Checks to see if form is valid before creating a new form
+  //If all checks pass, the setEmployee method is called, to save the entered employee.
+  //The buildForm method is then called to dynamically build a new form for the next employee being entered
+  //A new employeeModel and addressModel are then built for the same purpose
   addEmployee() {
     if(this.newEmployeeForm.valid) {
       this.setEmployee();
       this.buildForm();
       this.employeeModel = new EmployeeModel();
       this.addressModel = new AddressModel();
-      console.log(this.employeeArray);
     } else {
       this.newEmployeeForm.markAllAsTouched();
     }
-    
   }
 
   //Once a method has validated that the form group passes all requirements, this method sets the employee model to the entered values, and then pushes into our data array
