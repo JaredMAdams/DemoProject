@@ -13,13 +13,13 @@ public interface EmployeeRepo extends MongoRepository<Employee, String> {
     List<Employee> findByAddresses_State(String state);
 
     //Queries a list of entities based on their city
-    List<Employee> findByAddresses_CityLike(String city);
+    List<Employee> findByAddresses_CityLikeIgnoreCase(String city);
 
     //Queries a list of entities based on their First Name
-    List<Employee> findByFirstNameLike(String regexp);
+    List<Employee> findByFirstNameLikeIgnoreCase(String regexp);
 
     //Queries a list of entities based on their Last Name
-    List<Employee> findByLastNameLike(String lastName);
+    List<Employee> findByLastNameLikeIgnoreCase(String lastName);
 
     //Queries a list of entities based on their Zip code
     List<Employee> findByAddresses_ZipCodeLike(String zipCode);

@@ -186,7 +186,7 @@ public class EmployeeService {
 
     //Calls the "findByAddresses_City" method in order to return a list of employees belonging to a specific city
     public List<Employee> getEmployeesByCity(String city) {
-        return this.employeeRepo.findByAddresses_CityLike(city);
+        return this.employeeRepo.findByAddresses_CityLikeIgnoreCase(city);
     }
 
     //Calls the "findByAddresses_ZipCode" method in order to return a list of employees belonging to a specific zip code
@@ -197,12 +197,12 @@ public class EmployeeService {
     //@Cacheable(cacheNames = "employeeFirstName", cacheManager = "alternateCacheManager") - commented out as a result of not working while ehCache is active
     //Calls the "findByFirstName" method in order to return a list of employees having a specific first name
     public List<Employee> getEmployeesByFirstName(String firstName) {
-        return this.employeeRepo.findByFirstNameLike(firstName);
+        return this.employeeRepo.findByFirstNameLikeIgnoreCase(firstName);
     }
 
     //Calls the "findByLastName" method in order to return a list of employees having a specific last name
     public List<Employee> getEmployeesByLastName(String lastName) {
-        return this.employeeRepo.findByLastNameLike(lastName);
+        return this.employeeRepo.findByLastNameLikeIgnoreCase(lastName);
     }
 
     public List<Employee> getAllEmployees() {
