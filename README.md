@@ -38,3 +38,27 @@ Sample project to create an application which will carry out CRUD operations on 
 4. As soon as you save an employee. Refresh the list
 5. Search should be a like or contains search. Currently search for zip code, state and city is failing
 6. Create an enum for states and use it
+
+06/22/2023
+
+1. Unable to build using mvn clean install. Following is the error. 
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Errors: 
+[ERROR]   EmployeeServiceTest.givenEmployeeId_whenDeleteEmployee_thenNothing:93 » NullPointer Cannot invoke "com.example.demoproject.beans.repositories.EmployeeRepo.deleteById(Object)" because "this.employeeRepo" is null
+[ERROR]   EmployeeServiceTest.givenEmployeeId_whenGetEmployee_thenReturnEmployee:63 » NullPointer Cannot invoke "com.example.demoproject.beans.repositories.EmployeeRepo.findById(Object)" because "this.employeeRepo" is null
+[ERROR]   EmployeeServiceTest.givenEmployeeObject_whenCreateEmployee_thenReturnEmployeeObject:70 » NullPointer Cannot invoke "com.example.demoproject.beans.repositories.EmployeeRepo.save(Object)" because "this.employeeRepo" is null
+[ERROR]   EmployeeServiceTest.givenEmployeeObject_whenCreateEmployee_thenThrowInvalidStateException:81 » NullPointer Cannot invoke "com.example.demoproject.beans.repositories.EmployeeRepo.save(Object)" because "this.employeeRepo" is null
+[INFO] 
+[ERROR] Tests run: 5, Failures: 0, Errors: 4, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  7.964 s
+[INFO] Finished at: 2023-06-22T13:43:42-07:00
+[INFO] ------------------------------------------------------------------------
+
+
