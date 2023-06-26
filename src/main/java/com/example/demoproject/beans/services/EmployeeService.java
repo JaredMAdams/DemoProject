@@ -13,12 +13,121 @@ import java.util.concurrent.*;
 
 @Service
 public class EmployeeService {
+
     @Inject
     private EmployeeRepo employeeRepo;
     Map<String, String> states = new HashMap<String, String>();
 
     //Establishes map used to convert state to state 2 character code
     public EmployeeService() {
+        initializeStates();
+    }
+
+    //This constructor exists for the sole purpose of testing
+    public EmployeeService(EmployeeRepo employeeRepo){
+        this.employeeRepo = employeeRepo;
+        initializeStates();
+    }
+
+    //Extracting details of dummy employee and adding them to a list to be returned.
+    public List<String> dummyEmployee(Employee employee) {
+        List<String> employeeDetails = new LinkedList<>();
+        employeeDetails.add(employee.getEmployeeId());
+        employeeDetails.add(employee.getFirstName());
+        employeeDetails.add(employee.getLastName());
+
+        return employeeDetails;
+    }
+
+    //EmployeeID# is cached upon searching.
+    //If EmployeeId is not currently in cache, saves employeeId and then pulls info from DB
+    @Cacheable(cacheNames = "employeeId", key = "#employeeId")
+    public Optional<Employee> getEmployeeById(String employeeId) {
+        return this.employeeRepo.findById(employeeId);
+    }
+
+    //Calls the "findByAddresses_State" method in order to return a list of employees belonging to a specific state
+    public List<Employee> getEmployeesByState(String state) {
+        return this.employeeRepo.findByAddresses_State(states.get(state));
+    }
+
+    //Calls the "findByAddresses_City" method in order to return a list of employees belonging to a specific city
+    public List<Employee> getEmployeesByCity(String city) {
+        return this.employeeRepo.findByAddresses_CityLikeIgnoreCase(city);
+    }
+
+    //Calls the "findByAddresses_ZipCode" method in order to return a list of employees belonging to a specific zip code
+    public List<Employee> getEmployeesByZipCode(String zipCode) {
+        return this.employeeRepo.findByAddresses_ZipCodeLike(zipCode);
+    }
+
+    //@Cacheable(cacheNames = "employeeFirstName", cacheManager = "alternateCacheManager") - commented out as a result of not working while ehCache is active
+    //Calls the "findByFirstName" method in order to return a list of employees having a specific first name
+    public List<Employee> getEmployeesByFirstName(String firstName) {
+        return this.employeeRepo.findByFirstNameLikeIgnoreCase(firstName);
+    }
+
+    //Calls the "findByLastName" method in order to return a list of employees having a specific last name
+    public List<Employee> getEmployeesByLastName(String lastName) {
+        return this.employeeRepo.findByLastNameLikeIgnoreCase(lastName);
+    }
+
+    public List<Employee> getAllEmployees() {
+        return this.employeeRepo.findAll();
+    }
+    //@CachePut(cacheNames = "employeeFirstName", cacheManager = "alternateCacheManager") - commented out as a result of not working while ehCache is active
+    //Uses the build in "save" method to create a new employee
+    public Employee createEmployee(Employee employee) throws InvalidStateException {
+        convertStateToCode(employee);
+        return this.employeeRepo.save(employee);
+    }
+
+    //Method used to create multiple employees from a single submission
+    @Async
+    public Future<List<Employee>> createMultipleEmployees(List<Employee> employees) throws ExecutionException, InterruptedException {
+        //Creates new executor service, and sets thread pool size to 2.
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+        //This callable loops through the list of employees sent by the user, and calls the "save" method on each of them
+        Callable<List<Employee>> callable = () -> {
+            for(Employee employee : employees) {
+                convertStateToCode(employee);
+                this.employeeRepo.save(employee);
+            }
+            return null;
+        };
+
+        //Uses the executor service to execute the callable above, returning a future.
+        Future<List<Employee>> future = executorService.submit(callable);
+
+        //Waits until future is complete, then returns the result
+        future.get();
+
+        return future;
+    }
+
+    public void deleteEmployee(String objectId) {
+        this.employeeRepo.deleteById(objectId);
+    }
+
+    //Check if user input their state as its full name.
+    //If they did, it converts the state into its 2-digit code.
+    //If the state does not exist, an InvalidStateException is thrown, telling the user to please enter a valid state.
+    private void convertStateToCode(Employee employee) {
+        employee.getAddresses().forEach((address) -> states.entrySet()
+                .stream()
+                .filter(e -> address.getState().equalsIgnoreCase(e.getKey()))
+                .findFirst()
+                .ifPresentOrElse(
+                        (key) -> address.setState(key.getValue()),
+                        () -> {
+                            throw new InvalidStateException("Please Enter a Valid State");
+                        }
+                )
+        );
+    }
+
+    private void initializeStates() {
         states.put("Alabama","AL");
         states.put("AL","AL");
         states.put("Alaska","AK");
@@ -160,104 +269,5 @@ public class EmployeeService {
         states.put("YT","YT");
         states.put("", null);
         states.put(null, null);
-    }
-
-    //Extracting details of dummy employee and adding them to a list to be returned.
-    public List<String> dummyEmployee(Employee employee) {
-        List<String> employeeDetails = new LinkedList<>();
-        employeeDetails.add(employee.getEmployeeId());
-        employeeDetails.add(employee.getFirstName());
-        employeeDetails.add(employee.getLastName());
-
-        return employeeDetails;
-    }
-
-    //EmployeeID# is cached upon searching.
-    //If EmployeeId is not currently in cache, saves employeeId and then pulls info from DB
-    @Cacheable(cacheNames = "employeeId", key = "#employeeId")
-    public Optional<Employee> getEmployeeById(String employeeId) {
-        return this.employeeRepo.findById(employeeId);
-    }
-
-    //Calls the "findByAddresses_State" method in order to return a list of employees belonging to a specific state
-    public List<Employee> getEmployeesByState(String state) {
-        return this.employeeRepo.findByAddresses_State(states.get(state));
-    }
-
-    //Calls the "findByAddresses_City" method in order to return a list of employees belonging to a specific city
-    public List<Employee> getEmployeesByCity(String city) {
-        return this.employeeRepo.findByAddresses_CityLikeIgnoreCase(city);
-    }
-
-    //Calls the "findByAddresses_ZipCode" method in order to return a list of employees belonging to a specific zip code
-    public List<Employee> getEmployeesByZipCode(String zipCode) {
-        return this.employeeRepo.findByAddresses_ZipCodeLike(zipCode);
-    }
-
-    //@Cacheable(cacheNames = "employeeFirstName", cacheManager = "alternateCacheManager") - commented out as a result of not working while ehCache is active
-    //Calls the "findByFirstName" method in order to return a list of employees having a specific first name
-    public List<Employee> getEmployeesByFirstName(String firstName) {
-        return this.employeeRepo.findByFirstNameLikeIgnoreCase(firstName);
-    }
-
-    //Calls the "findByLastName" method in order to return a list of employees having a specific last name
-    public List<Employee> getEmployeesByLastName(String lastName) {
-        return this.employeeRepo.findByLastNameLikeIgnoreCase(lastName);
-    }
-
-    public List<Employee> getAllEmployees() {
-        return this.employeeRepo.findAll();
-    }
-    //@CachePut(cacheNames = "employeeFirstName", cacheManager = "alternateCacheManager") - commented out as a result of not working while ehCache is active
-    //Uses the build in "save" method to create a new employee
-    public Employee createEmployee(Employee employee) throws InvalidStateException {
-
-        convertStateToCode(employee);
-        return this.employeeRepo.save(employee);
-    }
-
-    //Method used to create multiple employees from a single submission
-    @Async
-    public Future createMultipleEmployees(List<Employee> employees) throws ExecutionException, InterruptedException {
-        //Creates new executor service, and sets thread pool size to 2.
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
-
-        //This callable loops through the list of employees sent by the user, and calls the "save" method on each of them
-        Callable<List<Employee>> callable = () -> {
-            for(Employee employee : employees) {
-                convertStateToCode(employee);
-                this.employeeRepo.save(employee);
-            }
-            return null;
-        };
-
-        //Uses the executor service to execute the callable above, returning a future.
-        Future<List<Employee>> future = executorService.submit(callable);
-
-        //Waits until future is complete, then returns the result
-        future.get();
-
-        return future;
-    }
-
-    public void deleteEmployee(String objectId) {
-        this.employeeRepo.deleteById(objectId);
-    }
-
-    //Check if user input their state as its full name.
-    //If they did, it converts the state into its 2-digit code.
-    //If the state does not exist, an InvalidStateException is thrown, telling the user to please enter a valid state.
-    private void convertStateToCode(Employee employee) {
-        employee.getAddresses().forEach((address) -> states.entrySet()
-                .stream()
-                .filter(e -> address.getState().equalsIgnoreCase(e.getKey()))
-                .findFirst()
-                .ifPresentOrElse(
-                        (key) -> address.setState(key.getValue()),
-                        () -> {
-                            throw new InvalidStateException("Please Enter a Valid State");
-                        }
-                )
-        );
     }
 }

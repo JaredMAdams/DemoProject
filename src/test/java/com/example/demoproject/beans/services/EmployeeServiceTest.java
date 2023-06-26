@@ -36,19 +36,25 @@ class EmployeeServiceTest {
 
     private Employee employee;
 
+
     private List<Employee> employees;
 
     private List<Address> addresses;
 
+
     @BeforeEach
     void setUp() {
         employeeRepo = Mockito.mock(EmployeeRepo.class);
-        employeeService = new EmployeeService();
+        employeeService = new EmployeeService(employeeRepo);
         addresses = Arrays.asList(
                 new Address("22", "33", "Austin", "Texas", "55555"),
                 new Address("11", "44", "Queens", "New York", "55555")
         );
         employee = new Employee("1", "John", "Doe", addresses);
+        employees = Arrays.asList(
+                employee,
+                new Employee("2", "Tim", "Ventura", addresses)
+        );
     }
 
     @AfterEach
@@ -71,14 +77,17 @@ class EmployeeServiceTest {
 
         Employee createdEmployee = employeeService.createEmployee(employee);
 
-        System.out.println(createdEmployee);
-
         assertThat(createdEmployee).isNotNull();
     }
 
     @Test
     void givenEmployeeObject_whenCreateEmployee_thenThrowInvalidStateException() {
         given(employeeService.createEmployee(employee)).willReturn(employee);
+
+        //Change addresses to something that is invalid
+        for(Address address: addresses) {
+            address.setState("Nw York");
+        }
 
         assertThrows(InvalidStateException.class,
                 () -> employeeService.createEmployee(employee));

@@ -2,7 +2,6 @@ package com.example.demoproject;
 
 import com.example.demoproject.beans.services.EmployeeService;
 import com.example.demoproject.entities.Employee;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
