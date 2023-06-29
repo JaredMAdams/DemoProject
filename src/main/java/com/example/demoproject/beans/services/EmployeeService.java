@@ -48,6 +48,7 @@ public class EmployeeService {
 
     //Calls the "findByAddresses_State" method in order to return a list of employees belonging to a specific state
     public List<Employee> getEmployeesByState(String state) {
+        state = states.get(state);
         return this.employeeRepo.findByAddresses_State(states.get(state));
     }
 
@@ -129,29 +130,17 @@ public class EmployeeService {
 
     private void initializeStates() {
         states.put("Alabama","AL");
-        states.put("AL","AL");
         states.put("Alaska","AK");
-        states.put("AK","AK");
         states.put("Alberta","AB");
-        states.put("AB","AB");
         states.put("American Samoa","AS");
-        states.put("AS","AS");
         states.put("Arizona","AZ");
-        states.put("AZ","AZ");
         states.put("Arkansas","AR");
-        states.put("AR","AR");
         states.put("Armed Forces (AE)","AE");
-        states.put("AE","AE");
         states.put("Armed Forces Americas","AA");
-        states.put("AA","AA");
         states.put("Armed Forces Pacific","AP");
-        states.put("AP","AP");
         states.put("British Columbia","BC");
-        states.put("BC","BC");
         states.put("California","CA");
-        states.put("CA","CA");
         states.put("Colorado","CO");
-        states.put("CO","CO");
         states.put("Connecticut","CT");
         states.put("Georgia","GA");
         states.put("Guam","GU");
@@ -208,6 +197,18 @@ public class EmployeeService {
         states.put("Wisconsin","WI");
         states.put("Wyoming","WY");
         states.put("Yukon Territory","YT");
+        states.put("AL","AL");
+        states.put("AK","AK");
+        states.put("AB","AB");
+        states.put("AS","AS");
+        states.put("AZ","AZ");
+        states.put("AR","AR");
+        states.put("AE","AE");
+        states.put("AA","AA");
+        states.put("AP","AP");
+        states.put("BC","BC");
+        states.put("CA","CA");
+        states.put("CO","CO");
         states.put("CT","CT");
         states.put("DE","DE");
         states.put("DC","DC");

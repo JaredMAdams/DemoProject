@@ -1,0 +1,89 @@
+<div>
+    
+    <button id="close" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="onClose()" style="float: right">
+        <mat-icon>close</mat-icon>
+    </button>
+
+    <h3>Upload a File: <input type="file" (change)="ReadExcel($event)"></h3>
+
+    <h1 *ngIf="employeeArray.length == 0" style="text-align: center;">Please Select A File To Be Uploaded</h1>
+
+    <div class="table">
+
+        <table mat-table [dataSource]="dataSource" *ngIf="employeeArray.length != 0">
+
+            <ng-container matColumnDef="number">
+
+                <th mat-header-cell *matHeaderCellDef="">No.</th>
+                <td mat-cell *matCellDef="let employee; let i = index">{{i + 1}}</td>
+
+            </ng-container>
+
+            <ng-container matColumnDef="first_name">
+
+                <th mat-header-cell *matHeaderCellDef="">First Name</th>
+                <td mat-cell *matCellDef="let employee">{{employee.First_Name}}</td>
+
+            </ng-container>
+
+            <ng-container matColumnDef="last_name">
+
+                <th mat-header-cell *matHeaderCellDef="">Last Name</th>
+                <td mat-cell *matCellDef="let employee">{{employee.Last_Name}}</td>
+
+            </ng-container>
+
+            <ng-container matColumnDef="street_address">
+                <th mat-header-cell *matHeaderCellDef="">Street Address</th>
+                <td mat-cell *matCellDef="let address">{{address.Street_Address}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="apt_number">
+                <th mat-header-cell *matHeaderCellDef="">Apt. Number</th>
+                <td mat-cell *matCellDef="let address">{{address.Apt_Number}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="city">
+                <th mat-header-cell *matHeaderCellDef="">City</th>
+                <td mat-cell *matCellDef="let address">{{address.City}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="state">
+                <th mat-header-cell *matHeaderCellDef="">State</th>
+                <td mat-cell *matCellDef="let address">{{address.State}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="zip_code">
+                <th mat-header-cell *matHeaderCellDef="">Zip Code</th>
+                <td mat-cell *matCellDef="let address">{{address.Zip_Code}}</td>
+            </ng-container>
+
+            
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+
+        <div [hidden]="hidePaginator == true">
+
+            <mat-paginator #paginator id="paginator" [length]="100"
+                [pageSize]="5"
+                [pageSizeOptions]="[5, 10, 20]"
+                aria-label="Select page">
+            </mat-paginator>
+
+        </div>
+
+    </div>
+
+    <br><br><br><br>
+
+    <button mat-flat-button style="float: right; margin-left: 1%; background-color: #b5b5b5;" (click)="onClose()">
+        Cancel
+    </button>
+
+    <button mat-flat-button color="primary" style="float: right;" (click)="saveEmployees()" *ngIf="employeeArray.length != 0">
+        Save Employees
+    </button>
+
+</div>

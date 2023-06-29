@@ -7,6 +7,7 @@
     <h1>Edit Address #{{this.data.position + 1}}</h1>
 
     <form class="form" [formGroup]="newAddressForm" (ngSubmit)="updateAddress($event);">
+        
         <mat-form-field  id="street_address" appearance="fill" style="width: 100%;">
 
             <mat-label>Street Address</mat-label>

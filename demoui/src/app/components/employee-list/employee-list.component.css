@@ -18,12 +18,31 @@ table {
     float: right;
 }
 
+.mat-column-number {
+    width: 7%;
+}
+
+.mat-column-id {
+    width: 20%;
+    text-align: center;
+}
+
+.mat-column-first_name {
+    width: 20%;
+    text-align: center;
+}
+
+.mat-column-last_name {
+    width: 20%;
+    text-align: center;
+}
+
 .mat-column-addresses {
     width: 15%;
+    text-align: center;
 }
 
 .mat-column-edit {
-    
     width: 5%;
 }
 

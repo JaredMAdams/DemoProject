@@ -14,6 +14,7 @@ import { MatFormFieldControl, MatFormFieldModule } from '@angular/material/form-
 import { MatInputModule } from '@angular/material/input';
 import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
 import { EditAddressComponent } from './components/edit-address/edit-address.component';
+import { BulkUploadComponent } from './components/bulk-upload/bulk-upload.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { EditAddressComponent } from './components/edit-address/edit-address.com
     CreateEmployeeComponent,
     EditEmployeeComponent,
     EditAddressComponent,
+    BulkUploadComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { EmployeeListComponent } from '../employee-list/employee-list.component';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { Employee } from 'src/app/interfaces/employee';
 import { Address } from 'src/app/interfaces/address';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EmployeeModel } from 'src/app/models/employee.model';
 import { AddressModel } from 'src/app/models/address.model';
 import { States } from 'src/app/enums/states.enum';
+
 
 @Component({
   selector: 'app-create-employee',
@@ -42,52 +43,22 @@ export class CreateEmployeeComponent implements OnInit {
     this.dialogRef.close(this.employeeModel);
   }
 
-  //Checks to see if only one employee is being added.
-  //If so, uses Post Employee to add that employee to the database, then closes its reference.
-  //If there is more than one, uses PostMultipleEmployees function to add more than one employee at a time.
-  //Both ways check to make sure that the entered employee is valid.
+  //The entered form is checked against validators, to make sure no required info is missing
+  //If all checks are passed, the SetEmployee method is called
+  //The newly set employee is then posted via the PostEmployee method and the dialog is closed
+  //If any checks did not pass, the invalid fields are marked as touched, and an error message is given to the user
   createEmployeeModel(e: any) {
     e.preventDefault();
-    if(this.employeeArray.length == 1) {
+    
+    if(this.newEmployeeForm.valid) {
+      this.employeeArray.splice(0, 1);
+      this.setEmployee();
       
-      if(this.newEmployeeForm.valid) {
-          this.employeeArray.splice(0, 1);
-          this.setEmployee();
-          
-          this.employeeService.PostEmployee(this.employeeModel).subscribe(newEmployee => {
-            this.dialogRef.close(this.employeeArray);
-          })
-        } else {
-          this.newEmployeeForm.markAllAsTouched();
-        }
-    }
-    else {
-      this.employeeArray.splice(0,1);
-
-      if(this.newEmployeeForm.valid) {
-        this.setEmployee();
-      } else {
-        this.newEmployeeForm.markAllAsTouched();
-      }
-
-      this.employeeService.PostMultipleEmployees(this.employeeArray).subscribe((response) => {
+      this.employeeService.PostEmployee(this.employeeModel).subscribe(newEmployee => {
         this.dialogRef.close(this.employeeArray);
       })
-    }
-  }
-
-  //Checks to see if form is valid before creating a new form
-  //If all checks pass, the setEmployee method is called, to save the entered employee.
-  //The buildForm method is then called to dynamically build a new form for the next employee being entered
-  //A new employeeModel and addressModel are then built for the same purpose
-  addEmployee() {
-    if(this.newEmployeeForm.valid) {
-      this.setEmployee();
-      this.buildForm();
-      this.employeeModel = new EmployeeModel();
-      this.addressModel = new AddressModel();
     } else {
-      this.newEmployeeForm.markAllAsTouched();
+        this.newEmployeeForm.markAllAsTouched();
     }
   }
 
@@ -106,8 +77,8 @@ export class CreateEmployeeComponent implements OnInit {
       this.employeeArray.push(this.employeeModel);
   }
 
-  //Dynamically builds a form group.
-  //Allows for more than one employee to be entered at a time
+  //Dynamically builds a form group when the dialog is initialized
+  //Allows for validation of fields
   buildForm() {
     this.newEmployeeForm = new FormGroup({
       firstName: new FormControl('', [Validators.required]),

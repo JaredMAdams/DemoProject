@@ -7,6 +7,8 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { CreateEmployeeComponent } from '../create-employee/create-employee.component';
 import { EditEmployeeComponent } from '../edit-employee/edit-employee.component';
+import { States } from 'src/app/enums/states.enum';
+import { BulkUploadComponent } from 'src/app/components/bulk-upload/bulk-upload.component';
 
 @Component({
   selector: 'app-employee-list',
@@ -15,10 +17,14 @@ import { EditEmployeeComponent } from '../edit-employee/edit-employee.component'
 })
 export class EmployeeListComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['number', 'first_name', 'last_name', 'addresses', 'edit', 'delete']
+  displayedColumns: string[] = ['number', 'id', 'first_name', 'last_name', 'addresses', 'edit', 'delete']
+
+  public states = Object.values(States);
 
   @ViewChild(MatTable) table!: MatTable<any>;
   @ViewChild('paginator') paginator!: MatPaginator;
+
+  hidePaginator: boolean = true;
 
   employees: Employee[] = [];
 
@@ -99,6 +105,26 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
         for(let employee of newEmployee) {
           this.employees.push(employee);
         }
+        this.hidePaginator = false;
+        this.dataSource = new MatTableDataSource(this.employees);
+        this.dataSource.paginator = this.paginator;
+      }
+    })
+  }
+
+  bulkUploadEmployees() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.height = "80%";
+    dialogConfig.width = "100%";
+    let dialogRef = this.dialog.open(BulkUploadComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((newEmployee: Employee[]) => {
+      if(newEmployee.length > 0) {
+        for(let employee of newEmployee) {
+          this.employees.push(employee);
+        }
+        this.hidePaginator = false;
         this.dataSource = new MatTableDataSource(this.employees);
         this.dataSource.paginator = this.paginator;
       }
@@ -124,6 +150,9 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
   deleteEmployee(employeeId: string, i: number) {
     this.employeeService.deleteEmployee(employeeId).subscribe(() => {
       this.employees.splice(i, 1);
+      if(this.employees.length == 0) {
+        this.hidePaginator = true;
+      }
       this.dataSource = new MatTableDataSource(this.employees);
       this.dataSource.paginator = this.paginator;
     })
@@ -165,9 +194,14 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     this.employeeService.GetAllEmployees().subscribe((list: Employee[]) =>
     {
       this.employees = list;
+      if(list.length > 0) {
+        this.hidePaginator = false;
+      }
+
       this.dataSource = new MatTableDataSource(this.employees);
       this.cdr.detectChanges();
       this.dataSource.paginator = this.paginator;
+      
     })    
   }
 
